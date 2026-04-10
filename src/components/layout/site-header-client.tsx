@@ -122,12 +122,6 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
                 >
                   Sign In
                 </Link>
-                <Link
-                  href="/auth/signup"
-                  className="rounded-full border border-[#e3d4c4] bg-white px-5 py-2 text-lg font-semibold text-[#7a4b2a] md:px-6 md:py-3 md:text-2xl"
-                >
-                  Join
-                </Link>
               </>
             )}
           </div>
