@@ -4,7 +4,7 @@ import { getApiContext, hasRole } from "@/lib/api";
 
 export async function POST(request: Request) {
   const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization"]) || !context.organization) {
+  if (!context.user || !hasRole(context.role, ["organization", "admin"]) || !context.organization) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -14,12 +14,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid product data." }, { status: 400 });
   }
 
-  const { title, summary, price } = parsed.data;
+  const { title, summary, price, image_url } = parsed.data;
   const { error } = await context.supabase.from("products").insert({
     organization_id: context.organization.id,
     title,
     summary,
     price,
+    image_url: image_url || null,
     status: "pending",
   });
 

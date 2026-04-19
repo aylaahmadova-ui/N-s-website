@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { HandHeart, Menu, X } from "lucide-react";
 
@@ -14,20 +13,14 @@ const menuItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Marketplace", href: "/marketplace" },
-  { label: "Campaigns", href: "/campaigns" },
-  { label: "Projects", href: "/projects" },
+  { label: "Donation Calls", href: "/campaigns" },
+  { label: "Clothing Support", href: "/clothes-donation" },
+  { label: "Idea Funding", href: "/projects" },
   { label: "Updates", href: "/updates" },
 ];
 
 export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
-
-  const onSignOut = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
-  };
 
   const profileLabel = user?.role === "organization" ? "Organization Profile" : "Your Profile";
 
@@ -107,12 +100,6 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
                 >
                   {profileLabel}
                 </Link>
-                <button
-                  onClick={onSignOut}
-                  className="rounded-full border border-[#e3d4c4] bg-white px-4 py-2 text-base font-semibold text-[#7a4b2a] md:px-5 md:text-lg"
-                >
-                  Sign Out
-                </button>
               </>
             ) : (
               <>

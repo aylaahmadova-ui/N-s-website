@@ -16,7 +16,7 @@ const offerings = [
     icon: Package,
   },
   {
-    title: "Donation Campaigns",
+    title: "Donation Calls",
     description: "Support specific needs with clear goals and transparency.",
     icon: HeartHandshake,
   },
@@ -39,7 +39,7 @@ const offerings = [
 
 const impactItems = [
   { label: "Safe Child Profiles", icon: ShieldCheck, tone: "bg-[#f6e8da]" },
-  { label: "Verified Campaigns", icon: HandCoins, tone: "bg-[#f9eadf]" },
+  { label: "Verified Donation Calls", icon: HandCoins, tone: "bg-[#f9eadf]" },
   { label: "Real Updates", icon: TrendingUp, tone: "bg-[#f7e7da]" },
 ];
 

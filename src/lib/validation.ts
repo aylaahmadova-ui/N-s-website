@@ -34,6 +34,7 @@ export const contentSchema = z.object({
   summary: z.string().min(12),
   amount_needed: z.coerce.number().min(0).optional(),
   price: z.coerce.number().min(0).optional(),
+  image_url: z.string().url().optional().or(z.literal("")),
 });
 
 export const updateSchema = z.object({

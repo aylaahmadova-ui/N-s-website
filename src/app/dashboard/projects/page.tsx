@@ -22,10 +22,10 @@ export default async function ProjectsDashboardPage() {
       <div className="grid gap-6 md:grid-cols-[240px_1fr]">
         <DashboardNav />
         <div className="space-y-5">
-          <Card title="Create project post" description="Project ideas are reviewed before they go public.">
-            <ContentForm endpoint="/api/dashboard/projects" includeAmount actionLabel="Submit project" />
+          <Card title="Create idea funding post" description="Idea funding posts are reviewed before they go public.">
+            <ContentForm endpoint="/api/dashboard/projects" includeAmount actionLabel="Submit idea funding" />
           </Card>
-          <Card title="Your projects">
+          <Card title="Your idea funding posts">
             <div className="space-y-3">
               {projects?.map((project) => (
                 <article key={project.id} className="rounded-lg border border-slate-200 p-3">
@@ -40,7 +40,7 @@ export default async function ProjectsDashboardPage() {
                   </p>
                 </article>
               ))}
-              {!projects?.length ? <p className="text-sm text-slate-600">No project posts yet.</p> : null}
+              {!projects?.length ? <p className="text-sm text-slate-600">No idea funding posts yet.</p> : null}
             </div>
           </Card>
         </div>

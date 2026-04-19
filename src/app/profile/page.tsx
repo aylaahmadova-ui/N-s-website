@@ -2,6 +2,8 @@ import Link from "next/link";
 import { requireAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteAccountButton } from "@/components/profile/delete-account-button";
+import { SignOutButton } from "@/components/profile/sign-out-button";
+import { MyProductSubmissions } from "@/components/forms/my-product-submissions";
 
 export default async function ProfilePage() {
   const { user, profile } = await requireAuth();
@@ -23,6 +25,16 @@ export default async function ProfilePage() {
       }
     | undefined;
   const isOrganization = profile?.role === "organization";
+  const isAdmin = profile?.role === "admin";
+
+  const { data: myProducts } = primaryOrganization
+    ? await supabase
+        .from("products")
+        .select("id, title, summary, price, image_url, status")
+        .eq("organization_id", primaryOrganization.id)
+        .order("created_at", { ascending: false })
+        .limit(10)
+    : { data: null };
 
   return (
     <div className="min-h-screen bg-[#f6f1ea] px-6 py-10 md:px-10">
@@ -52,6 +64,7 @@ export default async function ProfilePage() {
               </Link>
             </div>
           ) : null}
+          <SignOutButton />
           <DeleteAccountButton />
         </section>
 
@@ -99,6 +112,23 @@ export default async function ProfilePage() {
             <p className="mt-3 text-[#6f513d]">No organization memberships linked yet.</p>
           )}
         </section>
+
+        {(isOrganization || isAdmin) && primaryOrganization ? (
+          <section className="rounded-2xl border border-[#e3d5c7] bg-white p-6">
+            <p className="text-sm uppercase tracking-[0.12em] text-[#9c5f30]">Your Product Submissions</p>
+            <p className="mt-2 text-[#6f513d]">
+              Posting as {primaryOrganization.display_name}. Edit or delete your product posts here.
+            </p>
+            <div className="mt-4">
+              <MyProductSubmissions
+                items={(myProducts ?? []).map((product) => ({
+                  ...product,
+                  image_url: product.image_url ?? null,
+                }))}
+              />
+            </div>
+          </section>
+        ) : null}
       </div>
     </div>
   );

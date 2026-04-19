@@ -22,10 +22,10 @@ export default async function CampaignsDashboardPage() {
       <div className="grid gap-6 md:grid-cols-[240px_1fr]">
         <DashboardNav />
         <div className="space-y-5">
-          <Card title="Create campaign" description="Campaign requests enter moderation before publication.">
-            <ContentForm endpoint="/api/dashboard/campaigns" includeAmount actionLabel="Submit campaign" />
+          <Card title="Create donation call" description="Donation call requests enter moderation before publication.">
+            <ContentForm endpoint="/api/dashboard/campaigns" includeAmount actionLabel="Submit donation call" />
           </Card>
-          <Card title="Your campaigns">
+          <Card title="Your donation calls">
             <div className="space-y-3">
               {campaigns?.map((campaign) => (
                 <article key={campaign.id} className="rounded-lg border border-slate-200 p-3">
@@ -40,7 +40,7 @@ export default async function CampaignsDashboardPage() {
                   </p>
                 </article>
               ))}
-              {!campaigns?.length ? <p className="text-sm text-slate-600">No campaign posts yet.</p> : null}
+              {!campaigns?.length ? <p className="text-sm text-slate-600">No donation call posts yet.</p> : null}
             </div>
           </Card>
         </div>

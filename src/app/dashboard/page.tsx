@@ -79,8 +79,8 @@ export default async function DashboardPage() {
 
           <section className="grid gap-4 md:grid-cols-2">
             <Card title="Products" description={(productCount ?? 0) + " entries"} />
-            <Card title="Campaigns" description={(campaignCount ?? 0) + " entries"} />
-            <Card title="Projects" description={(projectCount ?? 0) + " entries"} />
+            <Card title="Donation Calls" description={(campaignCount ?? 0) + " entries"} />
+            <Card title="Idea Funding" description={(projectCount ?? 0) + " entries"} />
             <Card title="Updates" description={(updateCount ?? 0) + " entries"} />
           </section>
         </div>

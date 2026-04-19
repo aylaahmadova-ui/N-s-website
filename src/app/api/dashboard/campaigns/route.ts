@@ -4,7 +4,7 @@ import { getApiContext, hasRole } from "@/lib/api";
 
 export async function POST(request: Request) {
   const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization"]) || !context.organization) {
+  if (!context.user || !hasRole(context.role, ["organization", "admin"]) || !context.organization) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 

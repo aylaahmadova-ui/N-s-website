@@ -4,8 +4,8 @@ const links = [
   { href: "/dashboard", label: "Overview" },
   { href: "/dashboard/children", label: "Child profiles" },
   { href: "/dashboard/products", label: "Products" },
-  { href: "/dashboard/campaigns", label: "Campaigns" },
-  { href: "/dashboard/projects", label: "Projects" },
+  { href: "/dashboard/campaigns", label: "Donation Calls" },
+  { href: "/dashboard/projects", label: "Idea Funding" },
   { href: "/dashboard/updates", label: "Updates" },
 ];
 
