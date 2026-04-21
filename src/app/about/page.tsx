@@ -3,6 +3,7 @@ import {
   HeartHandshake,
   Lightbulb,
   Package,
+  Shirt,
   ShieldCheck,
   TrendingUp,
   HandCoins,
@@ -31,6 +32,11 @@ const offerings = [
     icon: TrendingUp,
   },
   {
+    title: "Clothing Support",
+    description: "Donate clothing essentials through verified requests from trusted organizations.",
+    icon: Shirt,
+  },
+  {
     title: "Verified System",
     description: "All activity is managed by trusted foster homes and organizations.",
     icon: ShieldCheck,
@@ -55,11 +61,11 @@ export default function AboutPage() {
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-[#5c3418] md:text-5xl">Kindora</h1>
+              <h1 className="text-4xl font-extrabold tracking-tight text-[#5c3418] md:text-5xl">Destekly</h1>
 
               <div className="mt-5 space-y-4 text-base leading-relaxed text-[#735847] md:text-lg">
                 <p>
-                  Kindora is a supervised platform where children in foster care can create, earn, and grow in a safe
+                  Destekly is a supervised platform where children in foster care can create, earn, and grow in a safe
                   and supportive environment.
                 </p>
                 <p>
@@ -68,7 +74,7 @@ export default function AboutPage() {
                   directly see the impact of their contributions through transparent updates.
                 </p>
                 <p>
-                  We are not just a charity platform. Kindora combines commerce, support, and opportunity while
+                  We are not just a charity platform. Destekly combines commerce, support, and opportunity while
                   ensuring safety, accountability, and dignity at every step.
                 </p>
                 <p className="font-semibold text-[#ad622e]">
@@ -119,7 +125,7 @@ export default function AboutPage() {
               <HandHeart className="h-5 w-5 text-[#a56131]" />
             </div>
             <p className="text-base text-[#745947] md:text-lg">
-              Kindora is built to protect dignity while unlocking opportunity through safe creativity, supervised support,
+              Destekly is built to protect dignity while unlocking opportunity through safe creativity, supervised support,
               and accountable impact.
             </p>
           </div>

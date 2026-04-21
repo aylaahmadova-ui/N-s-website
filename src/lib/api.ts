@@ -27,7 +27,7 @@ export async function getApiContext() {
   // If role exists in metadata but profile row is missing, self-heal for future requests.
   if (!profile && resolvedRole) {
     const fullName =
-      (user.user_metadata?.full_name as string | undefined) ?? user.email?.split("@")[0] ?? "Kindora User";
+      (user.user_metadata?.full_name as string | undefined) ?? user.email?.split("@")[0] ?? "Destekly User";
     await supabase.from("profiles").upsert({
       id: user.id,
       full_name: fullName,

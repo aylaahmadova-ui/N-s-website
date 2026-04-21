@@ -9,7 +9,7 @@ export default async function ApplyPage() {
     <div className="mx-auto max-w-2xl px-4 py-10">
       <Card
         title="Organization verification"
-        description="Complete this application to be reviewed by Kindora admins before you publish any public content."
+        description="Complete this application to be reviewed by Destekly admins before you publish any public content."
       >
         <OrganizationApplicationForm />
       </Card>

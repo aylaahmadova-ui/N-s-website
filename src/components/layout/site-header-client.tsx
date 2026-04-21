@@ -87,7 +87,7 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
             </button>
             <Link href="/" className="flex items-center gap-2">
               <HandHeart className="h-8 w-8 text-[#a56131]" />
-              <span className="text-4xl font-extrabold tracking-tight text-[#7a4b2a]">Kindora</span>
+              <span className="text-4xl font-extrabold tracking-tight text-[#7a4b2a]">Destekly</span>
             </Link>
           </div>
 

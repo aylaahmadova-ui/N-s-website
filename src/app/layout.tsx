@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Kindora",
+  title: "Destekly",
   description: "Supervised support platform for children in foster and NGO programs.",
 };
 

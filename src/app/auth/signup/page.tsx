@@ -6,7 +6,7 @@ export default function SignupPage() {
   return (
     <div className="mx-auto max-w-xl px-4 py-10">
       <Card
-        title="Create a Kindora account"
+        title="Create a Destekly account"
         description="Supporters can donate and purchase. Organizations can apply, then publish once approved."
       >
         <SignupForm />

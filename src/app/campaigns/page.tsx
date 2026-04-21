@@ -28,7 +28,7 @@ export default async function CampaignsPage() {
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-[#e6d5c3] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#8a5832]">
               <Sparkles className="h-3.5 w-3.5" />
-              Kindora Donation Calls
+              Destekly Donation Calls
             </p>
             <h1 className="mt-4 text-3xl font-semibold text-amber-900 md:text-4xl">Donation Calls</h1>
             <p className="mt-2 max-w-2xl text-base text-[#6d5b4b] md:text-lg">

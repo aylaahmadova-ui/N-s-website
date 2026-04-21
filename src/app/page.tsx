@@ -14,7 +14,7 @@ export default function HomePage() {
         </p>
 
         <h1 className="mt-7 text-5xl font-extrabold tracking-tight text-[#5c3418] md:text-7xl">
-          Welcome to <span className="text-[#a56131]">Kindora</span>
+          Welcome to <span className="text-[#a56131]">Destekly</span>
         </h1>
         <p className="mt-6 max-w-4xl text-xl text-[#735847] md:text-3xl">
           A supervised platform where foster children can sell their creations, receive support, and fund their ideas

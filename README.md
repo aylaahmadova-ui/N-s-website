@@ -1,6 +1,6 @@
-# Kindora MVP
+# Destekly MVP
 
-Kindora is a supervised support platform for foster homes and NGOs to safely:
+Destekly is a supervised support platform for foster homes and NGOs to safely:
 
 - create anonymized child profiles (no sensitive data)
 - sell handmade products made by children
@@ -52,9 +52,9 @@ cp .env.example .env.local
 
 Seed login accounts:
 
-- admin: `admin@kindora.org` / `Passw0rd!`
-- organization: `org@kindora.org` / `Passw0rd!`
-- supporter: `supporter@kindora.org` / `Passw0rd!`
+- admin: `admin@destekly.org` / `Passw0rd!`
+- organization: `org@destekly.org` / `Passw0rd!`
+- supporter: `supporter@destekly.org` / `Passw0rd!`
 
 4. Run locally:
 

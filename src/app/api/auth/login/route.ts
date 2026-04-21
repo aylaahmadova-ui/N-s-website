@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     const inferredName =
       (data.user.user_metadata?.full_name as string | undefined) ??
       data.user.email?.split("@")[0] ??
-      "Kindora User";
+      "Destekly User";
 
     await supabase.from("profiles").upsert({
       id: data.user.id,

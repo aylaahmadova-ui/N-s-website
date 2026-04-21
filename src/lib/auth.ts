@@ -23,7 +23,7 @@ export async function getCurrentUser() {
       ? user.user_metadata.account_type
       : null;
   const fallbackName =
-    (user.user_metadata?.full_name as string | undefined) ?? user.email?.split("@")[0] ?? "Kindora User";
+    (user.user_metadata?.full_name as string | undefined) ?? user.email?.split("@")[0] ?? "Destekly User";
 
   const resolvedProfile =
     profile ??
