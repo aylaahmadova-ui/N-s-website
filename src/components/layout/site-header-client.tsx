@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { HandHeart, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 type HeaderUser = {
   fullName: string | null;
@@ -86,7 +87,7 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
               <Menu className="h-6 w-6" />
             </button>
             <Link href="/" className="flex items-center gap-2">
-              <HandHeart className="h-8 w-8 text-[#a56131]" />
+              <Image src="/logo3.png" alt="Destekly logo" width={46} height={46} className="h-11 w-11 object-contain" priority />
               <span className="text-4xl font-extrabold tracking-tight text-[#7a4b2a]">Destekly</span>
             </Link>
           </div>

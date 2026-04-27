@@ -11,6 +11,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Destekly",
   description: "Supervised support platform for children in foster and NGO programs.",
+  icons: {
+    icon: "/logo3.png",
+    shortcut: "/logo3.png",
+    apple: "/logo3.png",
+  },
 };
 
 export default function RootLayout({
