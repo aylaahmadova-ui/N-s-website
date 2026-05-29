@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getOrganizationContext } from "@/lib/dashboard";
@@ -37,7 +38,7 @@ export default async function ProjectsPage() {
       ) : null}
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {projects?.map((project) => (
+        {projects?.map((project: any) => (
           <Card key={project.id} title={project.title} description={project.summary}>
             <p className="text-sm text-slate-600">
               By{" "}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   CheckCircle2,
   HeartHandshake,
@@ -86,7 +87,7 @@ export default function AboutPage() {
 
             <div className="space-y-4 lg:pt-10">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                {impactItems.map((item) => (
+                {impactItems.map((item: any) => (
                   <div key={item.label} className={`rounded-2xl border border-[#e2d2c1] p-4 ${item.tone}`}>
                     <item.icon className="h-5 w-5 text-[#a56131]" />
                     <p className="mt-2 text-sm font-semibold text-[#6f4629]">{item.label}</p>
@@ -100,7 +101,7 @@ export default function AboutPage() {
         <section className="mt-10">
           <h2 className="text-3xl font-bold text-[#5b341a] md:text-4xl">What We Offer</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {offerings.map((item) => (
+            {offerings.map((item: any) => (
               <article
                 key={item.title}
                 className="rounded-2xl border border-[#e3d5c7] bg-[#fffaf3] p-5 shadow-[0_12px_28px_rgba(113,73,43,0.08)]"

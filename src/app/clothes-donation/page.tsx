@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Shirt, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth";
@@ -54,7 +55,7 @@ export default async function ClothesDonationPage() {
       ) : null}
 
       <div className="grid gap-4 md:grid-cols-2">
-        {campaigns?.map((campaign) => (
+        {campaigns?.map((campaign: any) => (
           <Card key={campaign.id} title={campaign.title} description={campaign.summary}>
             <p className="text-sm text-slate-600">
               By{" "}

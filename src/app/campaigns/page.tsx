@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { HandCoins, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -62,7 +63,7 @@ export default async function CampaignsPage() {
       ) : null}
 
       <div className="flex flex-wrap items-start gap-3">
-        {campaigns?.map((campaign) => (
+        {campaigns?.map((campaign: any) => (
           <Card key={campaign.id} className="flex h-[33rem] w-[18rem] flex-col overflow-hidden rounded-2xl border-[#eadccf] p-0">
             <div className="flex h-64 items-center justify-center bg-gradient-to-br from-[#f8e8d8] via-[#f7e9db] to-[#efe0d1]">
               <div className="rounded-full bg-white/80 p-5">

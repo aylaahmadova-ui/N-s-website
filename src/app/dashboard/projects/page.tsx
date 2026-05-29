@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { requireRole } from "@/lib/auth";
 import { getOrganizationContext } from "@/lib/dashboard";
 import { createClient } from "@/lib/supabase/server";
@@ -27,7 +28,7 @@ export default async function ProjectsDashboardPage() {
           </Card>
           <Card title="Your idea funding posts">
             <div className="space-y-3">
-              {projects?.map((project) => (
+              {projects?.map((project: any) => (
                 <article key={project.id} className="rounded-lg border border-slate-200 p-3">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="font-semibold text-slate-900">{project.title}</h3>

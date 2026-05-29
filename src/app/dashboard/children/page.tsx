@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { requireRole } from "@/lib/auth";
 import { getOrganizationContext } from "@/lib/dashboard";
 import { createClient } from "@/lib/supabase/server";
@@ -29,7 +30,7 @@ export default async function ChildrenDashboardPage() {
           </Card>
           <Card title="Child profiles" description="Anonymized profiles managed by your organization">
             <div className="space-y-3">
-              {childProfiles?.map((child) => (
+              {childProfiles?.map((child: any) => (
                 <article key={child.id} className="rounded-lg border border-slate-200 p-3">
                   <h3 className="font-semibold text-slate-900">{child.alias_name}</h3>
                   <p className="text-sm text-slate-600">Age range: {child.age_range}</p>

@@ -39,7 +39,13 @@ export function SignupForm() {
       body: JSON.stringify(values),
     });
 
-    const data = await response.json();
+    const raw = await response.text();
+    let data: { error?: string; redirectTo?: string } = {};
+    try {
+      data = raw ? (JSON.parse(raw) as { error?: string; redirectTo?: string }) : {};
+    } catch {
+      data = {};
+    }
 
     if (!response.ok) {
       setError(data.error ?? "Sign up failed.");

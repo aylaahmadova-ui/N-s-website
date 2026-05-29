@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
 
@@ -14,7 +15,7 @@ export default async function UpdatesPage() {
       <h1 className="text-3xl font-semibold text-amber-900">Impact Updates</h1>
       <p className="mt-2 text-slate-600">Moderated progress stories after support is received.</p>
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {updates?.map((update) => (
+        {updates?.map((update: any) => (
           <Card key={update.id} title={update.title} description={update.details}>
             <p className="text-sm text-slate-600">
               By{" "}

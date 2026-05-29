@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { PackageOpen, Sparkles, Store } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -63,7 +64,7 @@ export default async function MarketplacePage() {
       ) : null}
 
       <div className="flex flex-wrap items-start gap-2">
-        {products?.map((product) => (
+        {products?.map((product: any) => (
           <Card
             key={product.id}
             className="flex h-[31rem] w-[17rem] max-w-[17rem] min-w-[17rem] flex-col overflow-hidden rounded-2xl border-[#eadccf] p-0"

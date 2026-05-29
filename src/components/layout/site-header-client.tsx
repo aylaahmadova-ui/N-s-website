@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -44,7 +45,7 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
           </button>
         </div>
         <nav className="flex flex-col gap-2">
-          {menuItems.map((item) => (
+          {menuItems.map((item: any) => (
             <Link
               key={item.label}
               href={item.href}

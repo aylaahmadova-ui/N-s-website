@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { requireAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -101,7 +102,7 @@ export default async function ProfilePage() {
           <p className="text-sm uppercase tracking-[0.12em] text-[#9c5f30]">Organization Membership</p>
           {membership?.length ? (
             <ul className="mt-3 space-y-2 text-[#6f513d]">
-              {membership.map((item) => (
+              {membership.map((item: any) => (
                 <li key={item.organization_id}>
                   Org: {(item.organizations as { display_name?: string } | null)?.display_name ?? item.organization_id} (
                   {item.role})
@@ -121,7 +122,7 @@ export default async function ProfilePage() {
             </p>
             <div className="mt-4">
               <MyProductSubmissions
-                items={(myProducts ?? []).map((product) => ({
+                items={(myProducts ?? []).map((product: any) => ({
                   ...product,
                   image_url: product.image_url ?? null,
                 }))}

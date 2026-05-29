@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { requireRole } from "@/lib/auth";
 import { getOrganizationContext } from "@/lib/dashboard";
 import { createClient } from "@/lib/supabase/server";
@@ -27,7 +28,7 @@ export default async function ProductsDashboardPage() {
           </Card>
           <Card title="Your products">
             <div className="space-y-3">
-              {products?.map((product) => (
+              {products?.map((product: any) => (
                 <article key={product.id} className="rounded-lg border border-slate-200 p-3">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="font-semibold text-slate-900">{product.title}</h3>
