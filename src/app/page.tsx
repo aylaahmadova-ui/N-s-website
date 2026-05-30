@@ -31,7 +31,7 @@ export default function HomePage() {
             href="mailto:aylaahmadova@gmail.com"
             className="rounded-full bg-[#a56131] px-12 py-4 text-lg font-bold text-white shadow-[0_14px_36px_rgba(120,74,41,0.25)] transition hover:bg-[#8e4f25]"
           >
-            Email
+            Contact
           </a>
           <button
             type="button"

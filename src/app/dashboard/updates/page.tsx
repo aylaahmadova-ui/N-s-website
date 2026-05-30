@@ -2,6 +2,7 @@
 import { requireRole } from "@/lib/auth";
 import { getOrganizationContext } from "@/lib/dashboard";
 import { createClient } from "@/lib/supabase/server";
+import { isAdminUnlocked } from "@/lib/admin-access";
 import { DashboardNav } from "@/components/layout/dashboard-nav";
 import { Card } from "@/components/ui/card";
 import { StatusPill } from "@/components/ui/status-pill";
@@ -11,6 +12,7 @@ export default async function UpdatesDashboardPage() {
   const { user } = await requireRole(["organization"]);
   const organization = await getOrganizationContext(user.id);
   const supabase = await createClient();
+  const adminUnlocked = await isAdminUnlocked();
 
   const { data: updates } = await supabase
     .from("updates")
@@ -23,8 +25,8 @@ export default async function UpdatesDashboardPage() {
       <div className="grid gap-6 md:grid-cols-[240px_1fr]">
         <DashboardNav />
         <div className="space-y-5">
-          <Card title="Post progress update" description="Share milestones after receiving support.">
-            <UpdateForm />
+          <Card title="Post progress update" description="Only admin can post updates.">
+            {adminUnlocked ? <UpdateForm /> : <p className="text-sm text-slate-600">Admin unlock is required to post updates.</p>}
           </Card>
           <Card title="Your updates">
             <div className="space-y-3">
