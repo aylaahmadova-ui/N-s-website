@@ -7,6 +7,7 @@ const links = [
   { href: "/dashboard/products", label: "Products" },
   { href: "/dashboard/campaigns", label: "Donation Calls" },
   { href: "/dashboard/projects", label: "Idea Funding" },
+  { href: "/dashboard/recognition", label: "Recognition" },
   { href: "/dashboard/updates", label: "Updates" },
 ];
 

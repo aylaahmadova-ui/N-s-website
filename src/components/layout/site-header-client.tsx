@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 type HeaderUser = {
@@ -16,15 +16,21 @@ const menuItems = [
   { label: "About", href: "/about" },
   { label: "Marketplace", href: "/marketplace" },
   { label: "Donation Calls", href: "/campaigns" },
+  { label: "Recognition", href: "/recognition" },
   { label: "Clothing Support", href: "/clothes-donation" },
-  { label: "Idea Funding", href: "/projects" },
   { label: "Updates", href: "/updates" },
 ];
 
-export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
+export function SiteHeaderClient({ user: _user }: { user: HeaderUser | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const profileLabel = user?.role === "organization" ? "Organization Profile" : "Your Profile";
+  useEffect(() => {
+    function handleOpenMenu() {
+      setMenuOpen(true);
+    }
+    window.addEventListener("destekly:open-menu", handleOpenMenu);
+    return () => window.removeEventListener("destekly:open-menu", handleOpenMenu);
+  }, []);
 
   return (
     <>
@@ -55,15 +61,13 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
               {item.label}
             </Link>
           ))}
-          {user ? (
-            <Link
-              href="/profile"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-xl px-4 py-3 text-2xl font-semibold text-[#6f4629] transition hover:bg-[#f7ebdd] hover:text-[#a56131]"
-            >
-              {profileLabel}
-            </Link>
-          ) : null}
+          <Link
+            href="/admin"
+            onClick={() => setMenuOpen(false)}
+            className="rounded-xl px-4 py-3 text-2xl font-semibold text-[#6f4629] transition hover:bg-[#f7ebdd] hover:text-[#a56131]"
+          >
+            Admin
+          </Link>
         </nav>
       </aside>
 
@@ -93,27 +97,7 @@ export function SiteHeaderClient({ user }: { user: HeaderUser | null }) {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
-            {user ? (
-              <>
-                <Link
-                  href="/profile"
-                  className="rounded-full border border-[#e3d4c4] bg-white px-4 py-2 text-base font-semibold text-[#7a4b2a] md:px-5 md:text-lg"
-                >
-                  {profileLabel}
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="rounded-full border border-[#e3d4c4] bg-white px-5 py-2 text-lg font-semibold text-[#7a4b2a] md:px-7 md:py-3 md:text-2xl"
-                >
-                  Sign In
-                </Link>
-              </>
-            )}
-          </div>
+          <div className="flex items-center gap-3" />
         </div>
       </header>
     </>

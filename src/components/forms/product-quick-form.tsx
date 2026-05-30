@@ -31,7 +31,10 @@ export function ProductQuickForm() {
     defaultValues: {
       title: "",
       summary: "",
+      story: "",
       price: 0,
+      contact_number: "",
+      card_number: "",
       image_url: "",
     },
   });
@@ -79,14 +82,20 @@ export function ProductQuickForm() {
       body: JSON.stringify(values),
     });
 
-    const data = await response.json();
+    const raw = await response.text();
+    let data: { error?: string } = {};
+    try {
+      data = raw ? (JSON.parse(raw) as { error?: string }) : {};
+    } catch {
+      data = {};
+    }
 
     if (!response.ok) {
       setError(data.error ?? "Could not submit product.");
       return;
     }
 
-    reset({ title: "", summary: "", price: 0, image_url: "" });
+    reset({ title: "", summary: "", story: "", price: 0, contact_number: "", card_number: "", image_url: "" });
     setPreviewUrl("");
     router.refresh();
   };
@@ -118,21 +127,42 @@ export function ProductQuickForm() {
       <div className="grid gap-4 md:grid-cols-2">
         <Input label="Product title" placeholder="Hand-painted tote bag" {...register("title")} error={errors.title?.message} />
         <Textarea
-          label="Description"
+          label="Short description"
           rows={4}
-          placeholder="What it is made from, why it is special, and who created it."
+          placeholder="Small text shown on the marketplace card."
           {...register("summary")}
           error={errors.summary?.message}
+        />
+        <Textarea
+          label="Story behind it"
+          rows={5}
+          placeholder="Full story shown on the product page when someone opens the card."
+          {...register("story" as any)}
+          error={(errors as any).story?.message}
           className="md:col-span-2"
         />
         <Input
-          label="Price (USD)"
+          label="Price (AZN)"
           type="number"
           step="0.01"
           min={0}
           placeholder="25"
           {...register("price")}
           error={errors.price?.message}
+        />
+        <Input
+          label="Contact number"
+          type="text"
+          placeholder="+994..."
+          {...register("contact_number" as any)}
+          error={(errors as any).contact_number?.message}
+        />
+        <Input
+          label="Card number"
+          type="text"
+          placeholder="0000 0000 0000 0000"
+          {...register("card_number" as any)}
+          error={(errors as any).card_number?.message}
         />
         <Input
           label="Image URL (optional)"
@@ -184,7 +214,7 @@ export function ProductQuickForm() {
         {isSubmitting ? "Submitting..." : (
           <span className="inline-flex items-center gap-2">
             <PackagePlus className="h-4 w-4" />
-            Submit product for review
+            Publish product
           </span>
         )}
       </Button>

@@ -32,8 +32,11 @@ export const childProfileSchema = z.object({
 export const contentSchema = z.object({
   title: z.string().min(4),
   summary: z.string().min(12),
+  story: z.string().min(20).optional(),
   amount_needed: z.coerce.number().min(0).optional(),
   price: z.coerce.number().min(0).optional(),
+  contact_number: z.string().min(5).optional(),
+  card_number: z.string().min(8).optional(),
   image_url: z.string().url().optional().or(z.literal("")),
 });
 

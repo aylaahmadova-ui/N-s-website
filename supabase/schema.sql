@@ -98,11 +98,20 @@ create trigger trg_products_updated_at
 before update on public.products
 for each row execute procedure public.handle_updated_at();
 
+alter table public.products add column if not exists story text;
+alter table public.products add column if not exists contact_number text;
+alter table public.products add column if not exists card_number text;
+
 create table if not exists public.campaigns (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
+  campaign_type text not null default 'general',
   title text not null,
   summary text not null,
+  image_url text,
+  card_number text,
+  contact_number text,
+  is_done boolean not null default false,
   amount_needed numeric(12,2) not null check (amount_needed >= 0),
   amount_raised numeric(12,2) not null default 0 check (amount_raised >= 0),
   stripe_product_id text,
@@ -114,6 +123,39 @@ create table if not exists public.campaigns (
 create trigger trg_campaigns_updated_at
 before update on public.campaigns
 for each row execute procedure public.handle_updated_at();
+
+alter table public.campaigns add column if not exists image_url text;
+alter table public.campaigns add column if not exists card_number text;
+alter table public.campaigns add column if not exists contact_number text;
+alter table public.campaigns add column if not exists campaign_type text not null default 'general';
+alter table public.campaigns add column if not exists is_done boolean not null default false;
+
+create table if not exists public.donor_registry (
+  donor_id text primary key,
+  donor_name text not null,
+  donor_surname text,
+  birth_year integer,
+  donor_description text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.donor_registry add column if not exists donor_surname text;
+alter table public.donor_registry add column if not exists birth_year integer;
+alter table public.donor_registry add column if not exists donor_description text;
+
+create table if not exists public.campaign_donations (
+  id uuid primary key default gen_random_uuid(),
+  campaign_id uuid not null references public.campaigns(id) on delete cascade,
+  donor_id text not null references public.donor_registry(donor_id) on delete restrict,
+  donor_name text not null,
+  is_anonymous boolean not null default false,
+  receipt_path text,
+  amount numeric(12,2) not null check (amount > 0),
+  created_at timestamptz not null default now()
+);
+
+alter table public.campaign_donations add column if not exists is_anonymous boolean not null default false;
+alter table public.campaign_donations add column if not exists receipt_path text;
 
 create table if not exists public.projects (
   id uuid primary key default gen_random_uuid(),

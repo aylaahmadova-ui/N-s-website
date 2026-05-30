@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { getApiContext, hasRole } from "@/lib/api";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdminApiAccess } from "@/lib/admin-access";
+
+const PRODUCT_IMAGES_BUCKET = "product-images";
 
 export async function POST(request: Request) {
-  const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization", "admin"]) || !context.organization) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const authError = await requireAdminApiAccess();
+  if (authError) return authError;
+  const admin = createAdminClient();
 
   const formData = await request.formData();
   const file = formData.get("file");
@@ -23,19 +25,33 @@ export async function POST(request: Request) {
   }
 
   try {
-    const record = await context.supabase.pb.collection("product_images").create({
-      organization_id: context.organization.id,
-      file,
-    });
-    const imageUrl = context.supabase.pb.files.getURL(record, record.file);
+    const { data: buckets } = await admin.storage.listBuckets();
+    const bucketExists = buckets?.some((bucket) => bucket.name === PRODUCT_IMAGES_BUCKET);
+    if (!bucketExists) {
+      const { error: createBucketError } = await admin.storage.createBucket(PRODUCT_IMAGES_BUCKET, {
+        public: true,
+        fileSizeLimit: 5 * 1024 * 1024,
+        allowedMimeTypes: ["image/png", "image/jpeg", "image/webp", "image/gif"],
+      });
+      if (createBucketError) throw createBucketError;
+    }
+
+    const extension = file.name.includes(".") ? file.name.split(".").pop()?.toLowerCase() : "jpg";
+    const safeExtension = extension && /^[a-z0-9]+$/.test(extension) ? extension : "jpg";
+    const objectPath = `admin/${crypto.randomUUID()}.${safeExtension}`;
+
+    const { error: uploadError } = await admin.storage
+      .from(PRODUCT_IMAGES_BUCKET)
+      .upload(objectPath, file, { upsert: false, contentType: file.type });
+    if (uploadError) throw uploadError;
+
+    const { data: publicUrlData } = admin.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(objectPath);
+    const imageUrl = publicUrlData.publicUrl;
     return NextResponse.json({ ok: true, imageUrl });
   } catch (error) {
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? `${error.message}. Create a PocketBase collection named product_images with a file field named file.`
-            : "Upload failed.",
+        error: error instanceof Error ? error.message : "Upload failed.",
       },
       { status: 400 },
     );

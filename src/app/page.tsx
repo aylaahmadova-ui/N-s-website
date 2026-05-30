@@ -1,7 +1,12 @@
-import Link from "next/link";
+"use client";
+
 import { HandHeart, Sparkles } from "lucide-react";
 
 export default function HomePage() {
+  function openSidebarMenu() {
+    window.dispatchEvent(new Event("destekly:open-menu"));
+  }
+
   return (
     <div className="min-h-screen bg-[#f6f1ea] text-[#3f2c1d]">
       <section className="mx-auto flex min-h-[calc(100vh-96px)] w-full max-w-7xl flex-col items-center justify-center px-6 py-16 text-center lg:px-10">
@@ -22,18 +27,19 @@ export default function HomePage() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/apply"
+          <a
+            href="mailto:aylaahmadova@gmail.com"
             className="rounded-full bg-[#a56131] px-12 py-4 text-lg font-bold text-white shadow-[0_14px_36px_rgba(120,74,41,0.25)] transition hover:bg-[#8e4f25]"
           >
-            Contact
-          </Link>
-          <Link
-            href="/dashboard"
+            Email
+          </a>
+          <button
+            type="button"
+            onClick={openSidebarMenu}
             className="rounded-full border border-[#e3d5c7] bg-white px-12 py-4 text-lg font-bold text-[#623a1f] transition hover:bg-[#fdf7f1]"
           >
             Browse Features
-          </Link>
+          </button>
         </div>
 
         <div className="mt-12 flex items-center justify-center gap-3 text-[#6f4629]">

@@ -36,8 +36,7 @@ export default async function ProjectsDashboardPage() {
                   </div>
                   <p className="mt-1 text-sm text-slate-700">{project.summary}</p>
                   <p className="mt-1 text-sm text-slate-700">
-                    Raised ${Number(project.amount_raised ?? 0).toFixed(2)} / $
-                    {Number(project.amount_needed ?? 0).toFixed(2)}
+                    Raised AZN {Number(project.amount_raised ?? 0).toFixed(2)} / AZN {Number(project.amount_needed ?? 0).toFixed(2)}
                   </p>
                 </article>
               ))}

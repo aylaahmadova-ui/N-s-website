@@ -47,7 +47,7 @@ export default async function ProjectsPage() {
                 : (project.organizations as { display_name?: string } | null)?.display_name) ?? "Organization"}
             </p>
             <p className="mt-2 text-sm text-slate-700">
-              Raised ${Number(project.amount_raised ?? 0).toFixed(2)} / ${Number(project.amount_needed ?? 0).toFixed(2)}
+              Raised AZN {Number(project.amount_raised ?? 0).toFixed(2)} / AZN {Number(project.amount_needed ?? 0).toFixed(2)}
             </p>
             <button className="mt-3 rounded-md bg-amber-700 px-3 py-2 text-sm text-white">Fund Project (placeholder)</button>
           </Card>

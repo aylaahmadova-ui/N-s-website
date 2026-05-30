@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
+import { UpdateForm } from "@/components/forms/update-form";
+
+function extractUpdateImage(details: string) {
+  const match = details.match(/\[image-url\](\S+)/);
+  if (!match) return { cleanDetails: details, imageUrl: null as string | null };
+  const cleanDetails = details.replace(/\n?\n?\[image-url\]\S+/, "").trim();
+  return { cleanDetails, imageUrl: match[1] ?? null };
+}
 
 export default async function UpdatesPage() {
   const supabase = await createClient();
@@ -14,9 +22,20 @@ export default async function UpdatesPage() {
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8">
       <h1 className="text-3xl font-semibold text-amber-900">Impact Updates</h1>
       <p className="mt-2 text-slate-600">Moderated progress stories after support is received.</p>
+      <section className="mt-6">
+        <Card title="Post an update" description="Share your latest progress with text and photos.">
+          <UpdateForm />
+        </Card>
+      </section>
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {updates?.map((update: any) => (
-          <Card key={update.id} title={update.title} description={update.details}>
+        {updates?.map((update: any) => {
+          const { cleanDetails, imageUrl } = extractUpdateImage(update.details ?? "");
+          return (
+          <Card key={update.id} title={update.title} description={cleanDetails}>
+            {imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageUrl} alt={update.title} className="mb-3 h-52 w-full rounded-lg object-cover" />
+            ) : null}
             <p className="text-sm text-slate-600">
               By{" "}
               {(Array.isArray(update.organizations)
@@ -27,7 +46,7 @@ export default async function UpdatesPage() {
               {update.created_at ? new Date(update.created_at).toLocaleDateString() : ""}
             </p>
           </Card>
-        ))}
+        )})}
         {!updates?.length ? <p className="text-slate-600">No updates published yet.</p> : null}
       </div>
     </div>

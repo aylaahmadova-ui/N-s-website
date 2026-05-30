@@ -104,7 +104,7 @@ export function MyProductSubmissions({ items }: { items: Submission[] }) {
             <h3 className="font-semibold text-[#62381f]">{item.title}</h3>
             <StatusPill status={item.status} />
           </div>
-          <p className="mt-1 text-sm font-semibold text-[#8b4e22]">${Number(item.price ?? 0).toFixed(2)}</p>
+          <p className="mt-1 text-sm font-semibold text-[#8b4e22]">AZN {Number(item.price ?? 0).toFixed(2)}</p>
 
           <div className="mt-3 flex gap-2">
             <Button type="button" className="text-xs" onClick={() => startEditing(item)} disabled={isSubmitting}>
@@ -131,7 +131,7 @@ export function MyProductSubmissions({ items }: { items: Submission[] }) {
             <Input label="Product title" value={title} onChange={(event) => setTitle(event.target.value)} />
             <Textarea label="Description" rows={4} value={summary} onChange={(event) => setSummary(event.target.value)} />
             <Input
-              label="Price (USD)"
+              label="Price (AZN)"
               type="number"
               step="0.01"
               min={0}
@@ -160,4 +160,3 @@ export function MyProductSubmissions({ items }: { items: Submission[] }) {
     </div>
   );
 }
-

@@ -36,8 +36,7 @@ export default async function CampaignsDashboardPage() {
                   </div>
                   <p className="mt-1 text-sm text-slate-700">{campaign.summary}</p>
                   <p className="mt-1 text-sm text-slate-700">
-                    Raised ${Number(campaign.amount_raised ?? 0).toFixed(2)} / $
-                    {Number(campaign.amount_needed ?? 0).toFixed(2)}
+                    Raised AZN {Number(campaign.amount_raised ?? 0).toFixed(2)} / AZN {Number(campaign.amount_needed ?? 0).toFixed(2)}
                   </p>
                 </article>
               ))}

@@ -41,7 +41,7 @@ export async function getCurrentUser() {
 
 export async function requireAuth() {
   const current = await getCurrentUser();
-  if (!current) redirect("/auth/login");
+  if (!current) redirect("/");
   return current;
 }
 

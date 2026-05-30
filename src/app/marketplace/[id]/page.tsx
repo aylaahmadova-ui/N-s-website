@@ -12,21 +12,12 @@ export default async function MarketplaceDetailsPage({ params }: Params) {
 
   const { data: product } = await supabase
     .from("products")
-    .select("id, title, summary, price, image_url, organizations(display_name, contact_email)")
+    .select("id, title, summary, story, price, image_url, contact_number, card_number")
     .eq("id", id)
     .eq("status", "published")
     .maybeSingle();
 
   if (!product) notFound();
-
-  const orgName =
-    (Array.isArray(product.organizations)
-      ? product.organizations[0]?.display_name
-      : (product.organizations as { display_name?: string } | null)?.display_name) ?? "Organization";
-  const orgEmail =
-    (Array.isArray(product.organizations)
-      ? product.organizations[0]?.contact_email
-      : (product.organizations as { contact_email?: string } | null)?.contact_email) ?? null;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 md:px-8">
@@ -48,23 +39,21 @@ export default async function MarketplaceDetailsPage({ params }: Params) {
         </div>
         <div className="p-6">
           <h1 className="text-3xl font-bold tracking-tight text-[#61341c]">{product.title}</h1>
-          <p className="mt-2 text-[#786455]">By {orgName}</p>
-          <p className="mt-5 whitespace-pre-line text-base leading-7 text-[#5f4d40]">{product.summary}</p>
+          <p className="mt-5 whitespace-pre-line text-base leading-7 text-[#5f4d40]">{product.story ?? product.summary}</p>
 
           <div className="mt-6 flex items-start justify-between gap-3">
-            <p className="text-2xl font-semibold text-[#8b4e22]">${Number(product.price ?? 0).toFixed(2)}</p>
+            <p className="text-2xl font-semibold text-[#8b4e22]">AZN {Number(product.price ?? 0).toFixed(2)}</p>
             <details className="group w-[240px] shrink-0 text-right">
               <summary className="list-none cursor-pointer rounded-lg bg-[#a95d2b] px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-[#954e21]">
-                Contact Organization
+                Buy
               </summary>
               <div className="mt-2 w-full rounded-md border border-[#e3d5c7] bg-[#fffaf5] px-3 py-2 text-sm text-[#6f513d]">
-                {orgEmail ? (
-                  <a href={`mailto:${orgEmail}`} className="break-all font-medium text-[#8b4e22] underline">
-                    {orgEmail}
-                  </a>
-                ) : (
-                  <span>Email not available</span>
-                )}
+                <p>
+                  <span className="font-semibold">Contact:</span> {product.contact_number || "Not provided"}
+                </p>
+                <p className="mt-1 break-all">
+                  <span className="font-semibold">Card:</span> {product.card_number || "Not provided"}
+                </p>
               </div>
             </details>
           </div>

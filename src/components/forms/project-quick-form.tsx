@@ -89,7 +89,7 @@ export function ProjectQuickForm() {
       />
 
       <Input
-        label="Funding goal (USD)"
+        label="Funding goal (AZN)"
         type="number"
         step="0.01"
         min={0}
@@ -120,4 +120,3 @@ export function ProjectQuickForm() {
     </form>
   );
 }
-

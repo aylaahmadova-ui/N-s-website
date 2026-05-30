@@ -9,7 +9,17 @@ export async function getOrganizationContext(userId: string) {
     .eq("user_id", userId)
     .maybeSingle();
 
-  if (!membership) return null;
+  if (!membership) {
+    const { data: createdOrganization } = await supabase
+      .from("organizations")
+      .select("*")
+      .eq("created_by", userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    return createdOrganization ?? null;
+  }
 
   const { data: organization } = await supabase
     .from("organizations")

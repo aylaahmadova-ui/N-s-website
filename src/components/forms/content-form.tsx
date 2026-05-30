@@ -61,7 +61,7 @@ export function ContentForm({
       <Textarea label="Summary" rows={4} {...register("summary")} error={errors.summary?.message} />
       {includePrice ? (
         <Input
-          label="Price"
+          label="Price (AZN)"
           type="number"
           step="0.01"
           {...register("price")}
@@ -70,7 +70,7 @@ export function ContentForm({
       ) : null}
       {includeAmount ? (
         <Input
-          label="Amount needed"
+          label="Amount needed (AZN)"
           type="number"
           step="0.01"
           {...register("amount_needed")}

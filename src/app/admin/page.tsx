@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { requireRole } from "@/lib/auth";
+import { requireAdminPageAccess } from "@/lib/admin-access";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
 import { StatusPill } from "@/components/ui/status-pill";
@@ -14,7 +14,7 @@ type ModerationItem = {
 };
 
 export default async function AdminPage() {
-  await requireRole(["admin"]);
+  await requireAdminPageAccess();
   const supabase = await createClient();
 
   const [organizationsRes, productsRes, campaignsRes, projectsRes, updatesRes] = await Promise.all([

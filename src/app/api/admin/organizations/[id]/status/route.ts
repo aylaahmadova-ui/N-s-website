@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getApiContext, hasRole } from "@/lib/api";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdminApiAccess } from "@/lib/admin-access";
 
 const schema = z.object({
   status: z.enum(["approved", "rejected"]),
 });
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["admin"])) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const authError = await requireAdminApiAccess();
+  if (authError) return authError;
+  const supabase = createAdminClient();
 
   const payload = await request.json();
   const parsed = schema.safeParse(payload);
@@ -20,13 +20,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   const { id } = await params;
 
-  const { error } = await context.supabase.from("organizations").update({ status: parsed.data.status }).eq("id", id);
+  const { error } = await supabase.from("organizations").update({ status: parsed.data.status }).eq("id", id);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
-  await context.supabase.from("moderation_logs").insert({
-    actor_id: context.user.id,
+  await supabase.from("moderation_logs").insert({
+    actor_id: null,
     target_type: "organization",
     target_id: id,
     action: parsed.data.status,

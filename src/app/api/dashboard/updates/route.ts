@@ -1,11 +1,34 @@
 import { NextResponse } from "next/server";
 import { updateSchema } from "@/lib/validation";
-import { getApiContext, hasRole } from "@/lib/api";
+import { getApiContext } from "@/lib/api";
+import { requireAdminApiAccess } from "@/lib/admin-access";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
+  const adminAuthError = await requireAdminApiAccess();
   const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization"]) || !context.organization) {
+  const isAdminUnlocked = !adminAuthError;
+  const canUseUserContext = !!context.user;
+
+  if (!isAdminUnlocked && !canUseUserContext) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
+  let organizationId = context.organization?.id ?? null;
+
+  if (!organizationId && (context.role === "admin" || isAdminUnlocked)) {
+    const orgClient = isAdminUnlocked ? createAdminClient() : context.supabase;
+    const { data: fallbackOrg } = await orgClient
+      .from("organizations")
+      .select("id")
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    organizationId = fallbackOrg?.id ?? null;
+  }
+
+  if (!organizationId) {
+    return NextResponse.json({ error: "No organization found for this account." }, { status: 400 });
   }
 
   const payload = await request.json();
@@ -15,11 +38,12 @@ export async function POST(request: Request) {
   }
 
   const { title, details } = parsed.data;
-  const { error } = await context.supabase.from("updates").insert({
-    organization_id: context.organization.id,
+  const writeClient = isAdminUnlocked ? createAdminClient() : context.supabase;
+  const { error } = await writeClient.from("updates").insert({
+    organization_id: organizationId,
     title,
     details,
-    status: "pending",
+    status: context.role === "admin" || isAdminUnlocked ? "published" : "pending",
   });
 
   if (error) {

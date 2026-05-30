@@ -1,29 +1,25 @@
 import { NextResponse } from "next/server";
 import { contentSchema } from "@/lib/validation";
-import { getApiContext, hasRole } from "@/lib/api";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdminApiAccess } from "@/lib/admin-access";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
-  const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization", "admin"]) || !context.organization) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const authError = await requireAdminApiAccess();
+  if (authError) return authError;
+  const supabase = createAdminClient();
 
   const { id } = await params;
 
-  const { data: existingProduct, error: existingError } = await context.supabase
+  const { data: existingProduct, error: existingError } = await supabase
     .from("products")
-    .select("id, organization_id")
+    .select("id")
     .eq("id", id)
     .maybeSingle();
 
   if (existingError || !existingProduct) {
     return NextResponse.json({ error: "Product not found." }, { status: 404 });
-  }
-
-  if (existingProduct.organization_id !== context.organization.id) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
   const payload = await request.json();
@@ -32,15 +28,18 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Invalid product data." }, { status: 400 });
   }
 
-  const { title, summary, price, image_url } = parsed.data;
-  const { error } = await context.supabase
+  const { title, summary, story, price, image_url, contact_number, card_number } = parsed.data;
+  const { error } = await supabase
     .from("products")
     .update({
       title,
       summary,
+      story: story ?? summary,
       price,
+      contact_number: contact_number ?? "",
+      card_number: card_number ?? "",
       image_url: image_url || null,
-      status: "pending",
+      status: "published",
     })
     .eq("id", id);
 
@@ -52,16 +51,15 @@ export async function PATCH(request: Request, { params }: Params) {
 }
 
 export async function DELETE(_: Request, { params }: Params) {
-  const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization", "admin"]) || !context.organization) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const authError = await requireAdminApiAccess();
+  if (authError) return authError;
+  const supabase = createAdminClient();
 
   const { id } = await params;
 
-  const { data: existingProduct, error: existingError } = await context.supabase
+  const { data: existingProduct, error: existingError } = await supabase
     .from("products")
-    .select("id, organization_id")
+    .select("id")
     .eq("id", id)
     .maybeSingle();
 
@@ -69,15 +67,10 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ error: "Product not found." }, { status: 404 });
   }
 
-  if (existingProduct.organization_id !== context.organization.id) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
-
-  const { error } = await context.supabase.from("products").delete().eq("id", id);
+  const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
   return NextResponse.json({ ok: true });
 }
-

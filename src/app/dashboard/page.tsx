@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   const organization = await getOrganizationContext(user.id);
   const isAdmin = profile?.role === "admin";
 
-  const [{ count: productCount }, { count: campaignCount }, { count: projectCount }, { count: updateCount }] =
+  const [{ count: productCount }, { count: campaignCount }, { count: updateCount }] =
     await Promise.all([
       supabase
         .from("products")
@@ -21,10 +21,6 @@ export default async function DashboardPage() {
         .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
       supabase
         .from("campaigns")
-        .select("*", { count: "exact", head: true })
-        .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
-      supabase
-        .from("projects")
         .select("*", { count: "exact", head: true })
         .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
       supabase
@@ -80,7 +76,6 @@ export default async function DashboardPage() {
           <section className="grid gap-4 md:grid-cols-2">
             <Card title="Products" description={(productCount ?? 0) + " entries"} />
             <Card title="Donation Calls" description={(campaignCount ?? 0) + " entries"} />
-            <Card title="Idea Funding" description={(projectCount ?? 0) + " entries"} />
             <Card title="Updates" description={(updateCount ?? 0) + " entries"} />
           </section>
         </div>

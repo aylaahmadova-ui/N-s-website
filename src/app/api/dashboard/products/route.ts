@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { contentSchema } from "@/lib/validation";
-import { getApiContext, hasRole } from "@/lib/api";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdminApiAccess } from "@/lib/admin-access";
+import { resolveMarketplaceOrganizationId } from "@/lib/marketplace-org";
 
 export async function POST(request: Request) {
-  const context = await getApiContext();
-  if (!context.user || !hasRole(context.role, ["organization", "admin"]) || !context.organization) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  const authError = await requireAdminApiAccess();
+  if (authError) return authError;
+  const supabase = createAdminClient();
 
   const payload = await request.json();
   const parsed = contentSchema.safeParse(payload);
@@ -14,14 +15,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid product data." }, { status: 400 });
   }
 
-  const { title, summary, price, image_url } = parsed.data;
-  const { error } = await context.supabase.from("products").insert({
-    organization_id: context.organization.id,
+  const organizationId = await resolveMarketplaceOrganizationId();
+  const { title, summary, story, price, image_url, contact_number, card_number } = parsed.data;
+  const { error } = await supabase.from("products").insert({
+    organization_id: organizationId,
     title,
     summary,
+    story: story ?? summary,
     price,
+    contact_number: contact_number ?? "",
+    card_number: card_number ?? "",
     image_url: image_url || null,
-    status: "pending",
+    status: "published",
   });
 
   if (error) {

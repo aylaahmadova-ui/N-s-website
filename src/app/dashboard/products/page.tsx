@@ -35,7 +35,7 @@ export default async function ProductsDashboardPage() {
                     <StatusPill status={product.status} />
                   </div>
                   <p className="mt-1 text-sm text-slate-700">{product.summary}</p>
-                  <p className="mt-1 text-sm text-amber-900">${Number(product.price ?? 0).toFixed(2)}</p>
+                  <p className="mt-1 text-sm text-amber-900">AZN {Number(product.price ?? 0).toFixed(2)}</p>
                 </article>
               ))}
               {!products?.length ? <p className="text-sm text-slate-600">No product posts yet.</p> : null}
