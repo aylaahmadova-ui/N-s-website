@@ -31,9 +31,21 @@ main {
 }
 
 .heading-glint {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
   flex-wrap: wrap;
   align-items: baseline;
+  justify-content: center;
+}
+
+.heading-glint-word {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.heading-glint-space {
+  display: inline-block;
+  width: 0.32em;
 }
 
 .heading-glint-letter {

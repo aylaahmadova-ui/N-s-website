@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Plus, Sparkles, Store } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminUnlocked } from "@/lib/admin-access";
 import { ProductQuickForm } from "@/components/forms/product-quick-form";
 import { ProductCard } from "@/components/marketplace/product-card";
 
 export default async function MarketplacePage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const adminUnlocked = await isAdminUnlocked();
 
   const { data: products } = await supabase

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { Card } from "@/components/ui/card";
 import { UpdateForm } from "@/components/forms/update-form";
 import { isAdminUnlocked } from "@/lib/admin-access";
@@ -12,7 +12,7 @@ function extractUpdateImage(details: string) {
 }
 
 export default async function UpdatesPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const adminUnlocked = await isAdminUnlocked();
   const { data: updates } = await supabase
     .from("updates")

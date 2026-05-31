@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Sparkles } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminUnlocked } from "@/lib/admin-access";
 import { CampaignQuickForm } from "@/components/forms/campaign-quick-form";
 import { CampaignCard } from "@/components/campaigns/campaign-card";
 
 export default async function CampaignsPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const adminUnlocked = await isAdminUnlocked();
   const { data: campaigns } = await supabase
     .from("campaigns")

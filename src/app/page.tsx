@@ -4,6 +4,8 @@ import Image from "next/image";
 import { HandHeart } from "lucide-react";
 
 export default function HomePage() {
+  const headingWords = ["Start", "with", "Destekly"];
+
   function openSidebarMenu() {
     window.dispatchEvent(new Event("destekly:open-menu"));
   }
@@ -19,9 +21,30 @@ export default function HomePage() {
           SUPERVISED SUPPORT PLATFORM
         </p>
 
-        <h1 className="mt-7 text-5xl font-extrabold tracking-tight md:text-7xl">
-          <span className="text-[#5c3418]">Start with</span>
-          <span className="block text-[#a56131] md:ml-2 md:inline">Destekly</span>
+        <h1 className="mt-7 text-4xl font-extrabold tracking-tight md:text-7xl">
+          <span className="heading-glint">
+            {headingWords.map((word, wordIndex) => {
+              const charsBefore = headingWords.slice(0, wordIndex).join("").length + wordIndex;
+              return (
+                <span key={word} className="heading-glint-word">
+                  {word.split("").map((char, charIndex) => {
+                    const index = charsBefore + charIndex;
+                    const isAccent = index >= 11;
+                    return (
+                      <span
+                        key={`${word}-${char}-${charIndex}`}
+                        className={`heading-glint-letter ${isAccent ? "heading-glint-letter-accent" : "heading-glint-letter-base"}`}
+                        style={{ animationDelay: `${index * 0.09}s` }}
+                      >
+                        {char}
+                      </span>
+                    );
+                  })}
+                  {wordIndex < headingWords.length - 1 ? <span className="heading-glint-space">&nbsp;</span> : null}
+                </span>
+              );
+            })}
+          </span>
         </h1>
         <p className="mt-6 max-w-4xl text-xl text-[#735847] md:text-3xl">
           A supervised platform where foster children can sell their creations, receive support, and fund their ideas
