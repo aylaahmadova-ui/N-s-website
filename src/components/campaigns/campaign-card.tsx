@@ -104,7 +104,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
       <Card
         className={`flex h-[23.5rem] w-full min-w-0 max-w-none flex-col overflow-hidden rounded-2xl border-[#eadccf] bg-white p-0 transition hover:-translate-y-0.5 hover:shadow-md md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem] ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
       >
-        <div className={`m-3 overflow-hidden rounded-xl bg-[#f4e8dc] ${clothesOnly ? "aspect-square" : "h-36"}`}>
+        <div className={`m-3 overflow-hidden rounded-xl bg-[#f4e8dc] ${clothesOnly ? "h-44 md:h-40" : "h-36"}`}>
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={imageUrl} alt={title} className="h-full w-full object-cover" />

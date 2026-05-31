@@ -4,8 +4,6 @@ import Image from "next/image";
 import { HandHeart } from "lucide-react";
 
 export default function HomePage() {
-  const heading = "Start with Destekly";
-
   function openSidebarMenu() {
     window.dispatchEvent(new Event("destekly:open-menu"));
   }
@@ -22,17 +20,8 @@ export default function HomePage() {
         </p>
 
         <h1 className="mt-7 text-5xl font-extrabold tracking-tight md:text-7xl">
-          <span className="heading-glint">
-            {heading.split("").map((char, index) => (
-              <span
-                key={`${char}-${index}`}
-                className={`heading-glint-letter ${index >= 11 ? "heading-glint-letter-accent" : "heading-glint-letter-base"}`}
-                style={{ animationDelay: `${index * 0.09}s` }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-          </span>
+          <span className="text-[#5c3418]">Start with</span>
+          <span className="block text-[#a56131] md:ml-2 md:inline">Destekly</span>
         </h1>
         <p className="mt-6 max-w-4xl text-xl text-[#735847] md:text-3xl">
           A supervised platform where foster children can sell their creations, receive support, and fund their ideas

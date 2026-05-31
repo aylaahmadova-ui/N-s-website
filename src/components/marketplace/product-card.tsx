@@ -30,7 +30,7 @@ export function ProductCard({ id, title, summary, price, imageUrl, adminUnlocked
           className="flex h-full w-full flex-col text-left"
           onClick={() => router.push(`/marketplace/${id}`)}
         >
-          <div className="m-3 aspect-square overflow-hidden rounded-xl bg-[#f4e8dc]">
+          <div className="m-3 h-44 overflow-hidden rounded-xl bg-[#f4e8dc] md:h-40">
             {imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
