@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getApiContext } from "@/lib/api";
 import { requireAdminApiAccess } from "@/lib/admin-access";
 
 const UPDATE_IMAGES_BUCKET = "update-images";
 
 export async function POST(request: Request) {
   const adminAuthError = await requireAdminApiAccess();
-  const context = await getApiContext();
-  const isAdminUnlocked = !adminAuthError;
-
-  if (!isAdminUnlocked && !context.user) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
+  if (adminAuthError) return adminAuthError;
 
   const admin = createAdminClient();
   const formData = await request.formData();
@@ -44,8 +38,7 @@ export async function POST(request: Request) {
 
     const extension = file.name.includes(".") ? file.name.split(".").pop()?.toLowerCase() : "jpg";
     const safeExtension = extension && /^[a-z0-9]+$/.test(extension) ? extension : "jpg";
-    const ownerSegment = context.organization?.id ?? context.user?.id ?? "admin";
-    const objectPath = `${ownerSegment}/${crypto.randomUUID()}.${safeExtension}`;
+    const objectPath = `admin/${crypto.randomUUID()}.${safeExtension}`;
 
     const { error: uploadError } = await admin.storage
       .from(UPDATE_IMAGES_BUCKET)

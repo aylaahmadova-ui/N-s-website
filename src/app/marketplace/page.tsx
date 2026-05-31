@@ -40,7 +40,7 @@ export default async function MarketplacePage() {
 
       <div className="flex flex-wrap items-start gap-4">
         {adminUnlocked ? (
-          <div className="flex h-[23.5rem] w-[16.5rem] max-w-[16.5rem] min-w-[16.5rem] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#dcbda2] bg-white text-[#8b4e22]">
+          <div className="flex h-[23.5rem] w-full min-w-0 max-w-none flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#dcbda2] bg-white text-[#8b4e22] md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem]">
             <Plus className="h-10 w-10" />
             <span className="mt-2 text-sm font-semibold">Use form above to post</span>
           </div>

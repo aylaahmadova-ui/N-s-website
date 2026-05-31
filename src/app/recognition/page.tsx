@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 type DonationRecord = {
   donor_id: string | null;
   donor_name: string | null;
+  donor_registry?: { donor_surname: string | null } | { donor_surname: string | null }[] | null;
   is_anonymous: boolean | null;
   amount: number | string | null;
 };
@@ -20,7 +21,9 @@ function formatAmount(amount: number) {
 
 export default async function RecognitionPage() {
   const supabase = await createClient();
-  const { data } = await supabase.from("campaign_donations").select("donor_id, donor_name, is_anonymous, amount");
+  const { data } = await supabase
+    .from("campaign_donations")
+    .select("donor_id, donor_name, is_anonymous, amount, donor_registry(donor_surname)");
 
   const rankedMap = new Map<string, RankedDonor>();
 
@@ -30,7 +33,10 @@ export default async function RecognitionPage() {
     const amount = Number(donation.amount ?? 0);
     if (!Number.isFinite(amount) || amount <= 0) continue;
 
+    const registry = Array.isArray(donation.donor_registry) ? donation.donor_registry[0] : donation.donor_registry;
     const cleanName = donation.donor_name?.trim();
+    const cleanSurname = registry?.donor_surname?.trim() ?? "";
+    const fullName = [cleanName, cleanSurname].filter(Boolean).join(" ").trim();
     const key = donation.donor_id || cleanName || "";
     if (!key) continue;
 
@@ -42,7 +48,7 @@ export default async function RecognitionPage() {
 
     rankedMap.set(key, {
       key,
-      donorName: cleanName || "Unnamed donor",
+      donorName: fullName || cleanName || "Unnamed donor",
       totalAmount: amount,
     });
   }

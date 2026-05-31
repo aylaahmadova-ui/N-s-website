@@ -11,6 +11,7 @@ type CampaignRecord = {
 type DonationRecord = {
   donor_id: string;
   donor_name: string;
+  donor_registry?: { donor_surname: string | null } | { donor_surname: string | null }[] | null;
   is_anonymous: boolean;
   amount: number | string | null;
 };
@@ -49,7 +50,7 @@ export default async function RecognitionDashboardPage() {
   if (campaignIds.length) {
     const { data: donations } = await supabase
       .from("campaign_donations")
-      .select("donor_id, donor_name, is_anonymous, amount")
+      .select("donor_id, donor_name, is_anonymous, amount, donor_registry(donor_surname)")
       .in("campaign_id", campaignIds);
 
     for (const donation of (donations as DonationRecord[] | null) ?? []) {
@@ -61,6 +62,9 @@ export default async function RecognitionDashboardPage() {
         continue;
       }
 
+      const registry = Array.isArray(donation.donor_registry) ? donation.donor_registry[0] : donation.donor_registry;
+      const donorSurname = registry?.donor_surname?.trim() ?? "";
+      const donorFullName = [donation.donor_name?.trim(), donorSurname].filter(Boolean).join(" ").trim() || donation.donor_name;
       const existing = rankedDonors.get(donation.donor_id);
 
       if (existing) {
@@ -71,7 +75,7 @@ export default async function RecognitionDashboardPage() {
 
       rankedDonors.set(donation.donor_id, {
         donorId: donation.donor_id,
-        donorName: donation.donor_name,
+        donorName: donorFullName,
         donationCount: 1,
         totalAmount: amount,
       });

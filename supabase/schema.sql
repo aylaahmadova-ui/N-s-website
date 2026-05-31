@@ -134,12 +134,14 @@ create table if not exists public.donor_registry (
   donor_id text primary key,
   donor_name text not null,
   donor_surname text,
+  donor_email text,
   birth_year integer,
   donor_description text,
   created_at timestamptz not null default now()
 );
 
 alter table public.donor_registry add column if not exists donor_surname text;
+alter table public.donor_registry add column if not exists donor_email text;
 alter table public.donor_registry add column if not exists birth_year integer;
 alter table public.donor_registry add column if not exists donor_description text;
 

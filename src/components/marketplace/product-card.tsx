@@ -19,9 +19,9 @@ export function ProductCard({ id, title, summary, price, imageUrl, adminUnlocked
   const [deleting, setDeleting] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto">
       <Card
-        className="flex h-[23.5rem] w-[16.5rem] max-w-[16.5rem] min-w-[16.5rem] cursor-pointer flex-col overflow-hidden rounded-2xl border-[#eadccf] bg-white p-0 transition hover:-translate-y-0.5 hover:shadow-md"
+        className="flex h-[23.5rem] w-full min-w-0 max-w-none cursor-pointer flex-col overflow-hidden rounded-2xl border-[#eadccf] bg-white p-0 transition hover:-translate-y-0.5 hover:shadow-md md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem]"
         title={undefined}
         description={undefined}
       >

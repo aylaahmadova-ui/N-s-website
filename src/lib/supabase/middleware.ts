@@ -23,9 +23,34 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user: { id: string } | null = null;
+
+  const clearAuthCookies = () => {
+    const authCookies = request.cookies
+      .getAll()
+      .filter((cookie) => cookie.name.startsWith("sb-") && cookie.name.includes("-auth-token"));
+
+    authCookies.forEach((cookie) => {
+      request.cookies.delete(cookie.name);
+      supabaseResponse.cookies.delete(cookie.name);
+    });
+  };
+
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    user = data.user;
+
+    if (error && error.message.toLowerCase().includes("refresh token")) {
+      clearAuthCookies();
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message.toLowerCase() : "";
+    if (message.includes("refresh token")) {
+      clearAuthCookies();
+    } else {
+      throw error;
+    }
+  }
 
   const pathname = request.nextUrl.pathname;
 

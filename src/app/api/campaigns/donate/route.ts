@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     ok: true,
     donorId: null,
     thankYou: fullyFunded
-      ? "Thank you. This donation call is now fully funded. Progress updates and photos will be shared in the Updates section."
-      : "Thank you for your donation. Progress updates and photos for this call will be shared in the Updates section.",
+      ? "Thank you. This donation call is now fully funded. Progress updates and photos will be shared on the Updates board, and we will notify you by email when children receive this support."
+      : "Thank you for your donation. Progress updates and photos will be shared on the Updates board, and we will notify you by email when children receive this support.",
   });
 }

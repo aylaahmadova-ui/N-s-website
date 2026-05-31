@@ -13,18 +13,12 @@ type HistoryItem = {
   receiptUrl: string | null;
 };
 
-type MatchItem = {
-  donorId: string;
-  donorName: string;
-  donorSurname?: string;
-  donorDescription?: string;
-};
-
 type CampaignCardProps = {
   id: string;
   title: string;
   summary: string;
   imageUrl?: string | null;
+  cardNumber?: string | null;
   contactNumber?: string | null;
   amountNeeded: number;
   amountRaised: number;
@@ -33,7 +27,7 @@ type CampaignCardProps = {
   isDone?: boolean;
 };
 
-export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amountNeeded, amountRaised, adminUnlocked, clothesOnly = false, isDone = false }: CampaignCardProps) {
+export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contactNumber, amountNeeded, amountRaised, adminUnlocked, clothesOnly = false, isDone = false }: CampaignCardProps) {
   const [open, setOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
@@ -44,12 +38,11 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
   const [donorType, setDonorType] = useState<"new" | "existing">("new");
   const [donorName, setDonorName] = useState("");
   const [donorSurname, setDonorSurname] = useState("");
+  const [donorEmail, setDonorEmail] = useState("");
   const [donorDescription, setDonorDescription] = useState("");
   const [selectedDonorId, setSelectedDonorId] = useState("");
   const [selectedDonorName, setSelectedDonorName] = useState("");
   const [selectedDonorDescription, setSelectedDonorDescription] = useState("");
-  const [matches, setMatches] = useState<MatchItem[]>([]);
-  const [matching, setMatching] = useState(false);
 
   const [visibility, setVisibility] = useState<"anonymous" | "name">("anonymous");
   const [amount, setAmount] = useState("");
@@ -67,24 +60,16 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
   const identityReady = clothesOnly ? true : !!selectedDonorId;
   const canDonate = identityReady && Number(amount) > 0 && !!receiptPath && !loading;
 
-  function displayMatchName(match: MatchItem) {
-    const base = (match.donorName ?? "").trim();
-    const surname = (match.donorSurname ?? "").trim();
-    if (!surname) return base;
-    if (base.toLowerCase().endsWith(` ${surname.toLowerCase()}`)) return base;
-    return `${base} ${surname}`.trim();
-  }
-
   function resetDonateFlow() {
     setStep(1);
     setDonorType("new");
     setDonorName("");
     setDonorSurname("");
+    setDonorEmail("");
     setDonorDescription("");
     setSelectedDonorId("");
     setSelectedDonorName("");
     setSelectedDonorDescription("");
-    setMatches([]);
     setVisibility("anonymous");
     setAmount("");
     setReceiptPath("");
@@ -115,9 +100,9 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
   }
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto">
       <Card
-        className={`flex h-[23.5rem] w-[16.5rem] max-w-[16.5rem] min-w-[16.5rem] flex-col overflow-hidden rounded-2xl border-[#eadccf] bg-white p-0 transition hover:-translate-y-0.5 hover:shadow-md ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
+        className={`flex h-[23.5rem] w-full min-w-0 max-w-none flex-col overflow-hidden rounded-2xl border-[#eadccf] bg-white p-0 transition hover:-translate-y-0.5 hover:shadow-md md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem] ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
       >
         <div className={`m-3 overflow-hidden rounded-xl bg-[#f4e8dc] ${clothesOnly ? "aspect-square" : "h-36"}`}>
           {imageUrl ? (
@@ -220,11 +205,11 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
                   </button>
                 </div>
 
-                <input className="w-full rounded-md border border-slate-300 px-3 py-2" placeholder="Name" value={donorName} onChange={(e) => setDonorName(e.target.value)} />
-                <input className="w-full rounded-md border border-slate-300 px-3 py-2" placeholder="Surname" value={donorSurname} onChange={(e) => setDonorSurname(e.target.value)} />
-
                 {donorType === "new" ? (
                   <>
+                    <input className="w-full rounded-md border border-slate-300 px-3 py-2" placeholder="Name" value={donorName} onChange={(e) => setDonorName(e.target.value)} />
+                    <input className="w-full rounded-md border border-slate-300 px-3 py-2" placeholder="Surname" value={donorSurname} onChange={(e) => setDonorSurname(e.target.value)} />
+                    <input className="w-full rounded-md border border-slate-300 px-3 py-2" type="email" placeholder="Email" value={donorEmail} onChange={(e) => setDonorEmail(e.target.value)} />
                     <input
                       className="w-full rounded-md border border-slate-300 px-3 py-2"
                       placeholder="Short description (e.g. Associate professor at ADA)"
@@ -240,16 +225,16 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
                           const res = await fetch("/api/campaigns/donor-id", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ donorName, donorSurname, donorDescription }),
+                            body: JSON.stringify({ donorType: "new", donorName, donorSurname, donorEmail, donorDescription }),
                           });
                           const raw = await res.text();
-                          const data = raw ? (JSON.parse(raw) as { donorId?: string; error?: string }) : {};
+                          const data = raw ? (JSON.parse(raw) as { donorId?: string; donorName?: string; error?: string }) : {};
                           if (!res.ok || !data.donorId) {
                             setError(data.error ?? "Could not create donor profile.");
                             return;
                           }
                           setSelectedDonorId(data.donorId);
-                          setSelectedDonorName(`${donorName} ${donorSurname}`.trim());
+                          setSelectedDonorName(data.donorName ?? `${donorName} ${donorSurname}`.trim());
                           setSelectedDonorDescription(donorDescription);
                         }}
                       >
@@ -263,45 +248,36 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
                   </>
                 ) : (
                   <>
-                    <button
-                      type="button"
-                      className="rounded-md border border-[#d7bca5] bg-white px-3 py-2 text-sm font-semibold text-[#7d4d2a]"
-                      onClick={async () => {
-                        setMatching(true);
-                        setError(null);
-                        const res = await fetch("/api/campaigns/donor-recover", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ donorName, donorSurname }),
-                        });
-                        const raw = await res.text();
-                        const data = raw ? (JSON.parse(raw) as { matches?: MatchItem[]; error?: string }) : {};
-                        setMatching(false);
-                        if (!res.ok) {
-                          setError(data.error ?? "Could not find matches.");
-                          return;
-                        }
-                        setMatches(data.matches ?? []);
-                      }}
-                    >
-                      {matching ? "Finding..." : "Find matches"}
-                    </button>
-                    {matches.map((m) => (
+                    <input className="w-full rounded-md border border-slate-300 px-3 py-2" type="email" placeholder="Email" value={donorEmail} onChange={(e) => setDonorEmail(e.target.value)} />
+                    {!selectedDonorId ? (
                       <button
-                        key={m.donorId}
                         type="button"
-                        className="block w-full rounded-md border border-emerald-200 bg-emerald-50 p-2 text-left"
-                        onClick={() => {
-                          setSelectedDonorId(m.donorId);
-                          setSelectedDonorName(displayMatchName(m));
-                          setSelectedDonorDescription(m.donorDescription ?? "");
+                        className="rounded-md border border-[#d7bca5] bg-white px-3 py-2 text-sm font-semibold text-[#7d4d2a]"
+                        onClick={async () => {
+                          setError(null);
+                          const res = await fetch("/api/campaigns/donor-id", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ donorType: "existing", donorEmail }),
+                          });
+                          const raw = await res.text();
+                          const data = raw ? (JSON.parse(raw) as { donorId?: string; donorName?: string; error?: string }) : {};
+                          if (!res.ok || !data.donorId) {
+                            setError(data.error ?? "Could not find donor by email.");
+                            return;
+                          }
+                          setSelectedDonorId(data.donorId);
+                          setSelectedDonorName(data.donorName ?? "Donor");
+                          setSelectedDonorDescription("");
                         }}
                       >
-                        <p className="text-sm font-semibold text-emerald-800">{displayMatchName(m)}</p>
-                        {m.donorDescription ? <p className="text-xs text-emerald-700">{m.donorDescription}</p> : null}
-                        <p className="text-xs text-emerald-700">Is this you? Tap to confirm.</p>
+                        Continue
                       </button>
-                    ))}
+                    ) : (
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
+                        Donor profile ready for: <span className="font-semibold">{selectedDonorName}</span>
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -324,8 +300,8 @@ export function CampaignCard({ id, title, summary, imageUrl, contactNumber, amou
             {!clothesOnly && step === 3 ? (
               <div className="mt-3 space-y-3">
                 <div className="rounded-lg border border-[#e3d5c7] bg-[#fffaf5] p-3">
-                  <p className="text-xs font-extrabold uppercase tracking-wide text-[#7a4b2a]">Phone number</p>
-                  <p className="mt-1 break-all text-base font-bold text-[#5f3520]">{contactNumber || "Not provided yet"}</p>
+                  <p className="text-xs font-extrabold uppercase tracking-wide text-[#7a4b2a]">Card number</p>
+                  <p className="mt-1 break-all text-base font-bold text-[#5f3520]">{cardNumber || "Not provided yet"}</p>
                 </div>
                 <input className="w-full rounded-md border border-slate-300 px-3 py-2" type="number" min="1" step="0.01" placeholder="Amount (AZN)" value={amount} onChange={(e) => setAmount(e.target.value)} />
                 <div className="rounded-lg border border-[#e3d5c7] bg-[#fffaf5] p-3">

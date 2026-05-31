@@ -10,7 +10,7 @@ export default async function CampaignsPage() {
   const adminUnlocked = await isAdminUnlocked();
   const { data: campaigns } = await supabase
     .from("campaigns")
-    .select("id, title, summary, image_url, contact_number, amount_needed, amount_raised")
+    .select("id, title, summary, image_url, card_number, contact_number, amount_needed, amount_raised")
     .eq("status", "published")
     .or("campaign_type.eq.general,campaign_type.is.null")
     .order("created_at", { ascending: false });
@@ -47,6 +47,7 @@ export default async function CampaignsPage() {
             title={campaign.title}
             summary={campaign.summary}
             imageUrl={campaign.image_url}
+            cardNumber={campaign.card_number}
             contactNumber={campaign.contact_number}
             amountNeeded={Number(campaign.amount_needed ?? 0)}
             amountRaised={Number(campaign.amount_raised ?? 0)}

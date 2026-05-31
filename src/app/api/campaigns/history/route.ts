@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 
   const { data, error } = await admin
     .from("campaign_donations")
-    .select("id, donor_name, is_anonymous, amount, receipt_path, created_at")
+    .select("id, donor_name, is_anonymous, amount, receipt_path, created_at, donor_registry(donor_surname)")
     .eq("campaign_id", parsed.data.campaignId)
     .order("created_at", { ascending: false })
     .limit(100);
@@ -35,6 +35,9 @@ export async function GET(request: Request) {
 
   const mapped = await Promise.all(
     (data ?? []).map(async (item) => {
+      const registry = Array.isArray(item.donor_registry) ? item.donor_registry[0] : item.donor_registry;
+      const donorSurname = registry?.donor_surname?.trim() ?? "";
+      const fullName = [item.donor_name?.trim(), donorSurname].filter(Boolean).join(" ").trim();
       let receiptUrl: string | null = null;
       if (adminUnlocked && item.receipt_path) {
         const { data: signedData } = await admin.storage
@@ -45,7 +48,7 @@ export async function GET(request: Request) {
 
       return {
         id: item.id,
-        donorName: item.is_anonymous ? "Anonymous" : item.donor_name,
+        donorName: item.is_anonymous ? "Anonymous" : fullName || item.donor_name,
         amount: Number(item.amount ?? 0),
         createdAt: item.created_at,
         receiptUrl,
