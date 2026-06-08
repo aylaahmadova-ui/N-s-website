@@ -13,21 +13,16 @@ export default async function DashboardPage() {
   const organization = await getOrganizationContext(user.id);
   const isAdmin = profile?.role === "admin";
 
-  const [{ count: productCount }, { count: campaignCount }, { count: updateCount }] =
-    await Promise.all([
-      supabase
-        .from("products")
-        .select("*", { count: "exact", head: true })
-        .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
-      supabase
-        .from("campaigns")
-        .select("*", { count: "exact", head: true })
-        .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
-      supabase
-        .from("updates")
-        .select("*", { count: "exact", head: true })
-        .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
-    ]);
+  const [{ count: campaignCount }, { count: updateCount }] = await Promise.all([
+    supabase
+      .from("campaigns")
+      .select("*", { count: "exact", head: true })
+      .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
+    supabase
+      .from("updates")
+      .select("*", { count: "exact", head: true })
+      .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
+  ]);
 
   if (!organization && !isAdmin) {
     return (
@@ -74,7 +69,6 @@ export default async function DashboardPage() {
           </Card>
 
           <section className="grid gap-4 md:grid-cols-2">
-            <Card title="Products" description={(productCount ?? 0) + " entries"} />
             <Card title="Donation Calls" description={(campaignCount ?? 0) + " entries"} />
             <Card title="Updates" description={(updateCount ?? 0) + " entries"} />
           </section>

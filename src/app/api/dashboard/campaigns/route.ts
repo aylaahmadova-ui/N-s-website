@@ -2,13 +2,17 @@ import { NextResponse } from "next/server";
 import { contentSchema } from "@/lib/validation";
 import { requireAdminApiAccess } from "@/lib/admin-access";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { resolveMarketplaceOrganizationId } from "@/lib/marketplace-org";
 
 export async function POST(request: Request) {
   const authError = await requireAdminApiAccess();
   if (authError) return authError;
   const supabase = createAdminClient();
-  const organizationId = await resolveMarketplaceOrganizationId();
+  const { data: fallbackOrg } = await supabase.from("organizations").select("id").order("created_at", { ascending: true }).limit(1).maybeSingle();
+  const organizationId = fallbackOrg?.id ?? null;
+
+  if (!organizationId) {
+    return NextResponse.json({ error: "No organization found." }, { status: 400 });
+  }
 
   const payload = await request.json();
   const parsed = contentSchema.safeParse(payload);

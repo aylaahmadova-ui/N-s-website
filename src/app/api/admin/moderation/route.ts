@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdminApiAccess } from "@/lib/admin-access";
 
 const schema = z.object({
-  table: z.enum(["products", "campaigns", "projects", "updates"]),
+  table: z.enum(["campaigns", "projects", "updates"]),
   id: z.string().uuid(),
   status: z.enum(["approved", "rejected", "published"]),
   notes: z.string().optional(),

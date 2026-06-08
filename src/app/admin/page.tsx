@@ -7,7 +7,7 @@ import { OrganizationReviewActions } from "@/components/admin/organization-revie
 import { ModerationActions } from "@/components/admin/moderation-actions";
 
 type ModerationItem = {
-  table: "products" | "campaigns" | "projects" | "updates";
+  table: "campaigns" | "projects" | "updates";
   id: string;
   title: string;
   status: "pending" | "approved" | "rejected" | "published" | "draft";
@@ -17,16 +17,14 @@ export default async function AdminPage() {
   await requireAdminPageAccess();
   const supabase = await createClient();
 
-  const [organizationsRes, productsRes, campaignsRes, projectsRes, updatesRes] = await Promise.all([
+  const [organizationsRes, campaignsRes, projectsRes, updatesRes] = await Promise.all([
     supabase.from("organizations").select("id, display_name, description, status").order("created_at", { ascending: false }),
-    supabase.from("products").select("id, title, status").eq("status", "pending").order("created_at", { ascending: false }),
     supabase.from("campaigns").select("id, title, status").eq("status", "pending").order("created_at", { ascending: false }),
     supabase.from("projects").select("id, title, status").eq("status", "pending").order("created_at", { ascending: false }),
     supabase.from("updates").select("id, title, status").eq("status", "pending").order("created_at", { ascending: false }),
   ]);
 
   const moderationQueue: ModerationItem[] = [
-    ...((productsRes.data ?? []).map((item: any) => ({ ...item, table: "products" as const }))),
     ...((campaignsRes.data ?? []).map((item: any) => ({ ...item, table: "campaigns" as const }))),
     ...((projectsRes.data ?? []).map((item: any) => ({ ...item, table: "projects" as const }))),
     ...((updatesRes.data ?? []).map((item: any) => ({ ...item, table: "updates" as const }))),

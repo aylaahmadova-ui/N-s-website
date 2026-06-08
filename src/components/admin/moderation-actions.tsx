@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-type ModerationTable = "products" | "campaigns" | "projects" | "updates";
+type ModerationTable = "campaigns" | "projects" | "updates";
 type ModerationStatus = "approved" | "rejected" | "published";
 
 export function ModerationActions({ table, itemId }: { table: ModerationTable; itemId: string }) {
@@ -55,4 +55,3 @@ export function ModerationActions({ table, itemId }: { table: ModerationTable; i
     </div>
   );
 }
-

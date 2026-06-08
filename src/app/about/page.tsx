@@ -3,7 +3,6 @@ import {
   CheckCircle2,
   HeartHandshake,
   Lightbulb,
-  Package,
   Shirt,
   ShieldCheck,
   TrendingUp,
@@ -12,11 +11,6 @@ import {
 } from "lucide-react";
 
 const offerings = [
-  {
-    title: "Marketplace",
-    description: "Handmade products created by children, available for purchase.",
-    icon: Package,
-  },
   {
     title: "Donation Calls",
     description: "Support specific needs with clear goals and transparency.",
@@ -70,14 +64,11 @@ export default function AboutPage() {
                   and supportive environment.
                 </p>
                 <p>
-                  Through verified foster homes and organizations, children can share handmade products, raise support
-                  for real needs, and fund ideas they want to turn into reality. Supporters can shop, donate, and
-                  directly see the impact of their contributions through transparent updates.
+                  Through verified foster homes and organizations, children can raise support for real needs and fund
+                  ideas they want to turn into reality. Supporters can donate and directly see the impact of their
+                  contributions through transparent updates.
                 </p>
-                <p>
-                  We are not just a charity platform. Destekly combines commerce, support, and opportunity while
-                  ensuring safety, accountability, and dignity at every step.
-                </p>
+                <p>We are not just a charity platform. Destekly combines support and opportunity while ensuring safety, accountability, and dignity at every step.</p>
                 <p className="font-semibold text-[#ad622e]">
                   Our goal is simple: to give every child the chance to build something of their own and shape a better
                   future.

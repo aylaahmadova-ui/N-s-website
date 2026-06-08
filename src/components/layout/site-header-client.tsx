@@ -6,22 +6,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
-type HeaderUser = {
-  fullName: string | null;
-  role: string | null;
-};
-
 const menuItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Marketplace", href: "/marketplace" },
   { label: "Donation Calls", href: "/campaigns" },
   { label: "Recognition", href: "/recognition" },
   { label: "Clothing Support", href: "/clothes-donation" },
   { label: "Updates", href: "/updates" },
 ];
 
-export function SiteHeaderClient({ user: _user }: { user: HeaderUser | null }) {
+export function SiteHeaderClient() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
