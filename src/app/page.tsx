@@ -47,8 +47,8 @@ export default function HomePage() {
           </span>
         </h1>
         <p className="mt-6 max-w-4xl text-xl text-[#735847] md:text-3xl">
-          A supervised platform where foster children can sell their creations, receive support, and fund their ideas
-          through verified organizations.
+          A charity platform where you can make a real difference by supporting people, projects, and causes through
+          verified organizations.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -69,7 +69,7 @@ export default function HomePage() {
 
         <div className="mt-12 flex items-center justify-center gap-3 text-[#6f4629]">
           <HandHeart className="h-5 w-5" />
-          <p className="text-sm font-medium tracking-wide">Safe. Verified. Child-Protective.</p>
+          <p className="text-sm font-medium tracking-wide">Safe. Verified. Impactful.</p>
         </div>
       </section>
     </div>
