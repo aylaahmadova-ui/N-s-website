@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
+import { LanguageProvider } from "@/lib/i18n/context";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic", "latin-ext"],
 });
 
 export const metadata: Metadata = {
@@ -24,10 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="az" className={`${inter.variable} antialiased`}>
       <body className="min-h-screen text-slate-900">
-        <SiteHeader />
-        <main>{children}</main>
+        <LanguageProvider>
+          <SiteHeader />
+          <main>{children}</main>
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -23,7 +23,8 @@ export default async function RecognitionPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("campaign_donations")
-    .select("donor_id, donor_name, is_anonymous, amount, donor_registry(donor_surname)");
+    .select("donor_id, donor_name, is_anonymous, amount, donor_registry(donor_surname)")
+    .eq("status", "approved");
 
   const rankedMap = new Map<string, RankedDonor>();
 
