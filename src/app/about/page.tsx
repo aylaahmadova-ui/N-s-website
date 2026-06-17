@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import {
   CheckCircle2,
   HeartHandshake,
@@ -9,105 +10,77 @@ import {
   HandCoins,
   HandHeart,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
-const offerings = [
-  {
-    title: "Donation Calls",
-    description: "Support specific needs with clear goals and transparency.",
-    icon: HeartHandshake,
-  },
-  {
-    title: "Idea Funding",
-    description: "Help bring children's ideas and projects to life.",
-    icon: Lightbulb,
-  },
-  {
-    title: "Progress Updates",
-    description: "Track how contributions are used through real updates.",
-    icon: TrendingUp,
-  },
-  {
-    title: "Clothing Support",
-    description: "Donate clothing essentials through verified requests from trusted organizations.",
-    icon: Shirt,
-  },
-  {
-    title: "Verified System",
-    description: "All activity is managed by trusted foster homes and organizations.",
-    icon: ShieldCheck,
-  },
-];
-
-const impactItems = [
-  { label: "Safe Child Profiles", icon: ShieldCheck, tone: "bg-[#f6e8da]" },
-  { label: "Verified Donation Calls", icon: HandCoins, tone: "bg-[#f9eadf]" },
-  { label: "Real Updates", icon: TrendingUp, tone: "bg-[#f7e7da]" },
-];
+const OFFERING_ICONS = [HeartHandshake, Lightbulb, TrendingUp, Shirt, ShieldCheck];
+const IMPACT_ICONS = [ShieldCheck, HandCoins, TrendingUp];
+const IMPACT_TONES = ["bg-[#f6e8da]", "bg-[#f9eadf]", "bg-[#f7e7da]"];
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+
+  const impactLabels = [t.about.impactBadge1, t.about.impactBadge2, t.about.impactBadge3];
+
   return (
     <div className="min-h-screen bg-[#f6f1ea] px-6 py-14 text-[#3f2c1d] md:px-10">
       <div className="mx-auto max-w-6xl">
         <section className="rounded-3xl border border-[#e3d5c7] bg-[linear-gradient(145deg,#fcf7f1,#f3e5d7)] p-7 shadow-[0_22px_50px_rgba(120,74,41,0.10)] md:p-10">
           <p className="inline-flex items-center gap-2 rounded-full border border-[#e0cfbc] bg-[#f7ebdf] px-4 py-1 text-xs font-bold uppercase tracking-[0.15em] text-[#9c5f30]">
             <CheckCircle2 className="h-4 w-4" />
-            About Us
+            {t.about.badge}
           </p>
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-[#5c3418] md:text-5xl">Destekly</h1>
+              <h1 className="text-4xl font-extrabold tracking-tight text-[#5c3418] md:text-5xl">{t.about.title}</h1>
 
               <div className="mt-5 space-y-4 text-base leading-relaxed text-[#735847] md:text-lg">
-                <p>
-                  Destekly is a supervised platform where children in foster care can create, earn, and grow in a safe
-                  and supportive environment.
-                </p>
-                <p>
-                  Through verified foster homes and organizations, children can raise support for real needs and fund
-                  ideas they want to turn into reality. Supporters can donate and directly see the impact of their
-                  contributions through transparent updates.
-                </p>
-                <p>We are not just a charity platform. Destekly combines support and opportunity while ensuring safety, accountability, and dignity at every step.</p>
-                <p className="font-semibold text-[#ad622e]">
-                  Our goal is simple: to give every child the chance to build something of their own and shape a better
-                  future.
-                </p>
+                <p>{t.about.desc1}</p>
+                <p>{t.about.desc2}</p>
+                <p>{t.about.desc3}</p>
+                <p className="font-semibold text-[#ad622e]">{t.about.descGoal}</p>
               </div>
             </div>
 
             <div className="space-y-4 lg:pt-10">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                {impactItems.map((item: any) => (
-                  <div key={item.label} className={`rounded-2xl border border-[#e2d2c1] p-4 ${item.tone}`}>
-                    <item.icon className="h-5 w-5 text-[#a56131]" />
-                    <p className="mt-2 text-sm font-semibold text-[#6f4629]">{item.label}</p>
-                  </div>
-                ))}
+                {impactLabels.map((label, index) => {
+                  const IconComponent = IMPACT_ICONS[index];
+                  const tone = IMPACT_TONES[index];
+                  return (
+                    <div key={label} className={`rounded-2xl border border-[#e2d2c1] p-4 ${tone}`}>
+                      <IconComponent className="h-5 w-5 text-[#a56131]" />
+                      <p className="mt-2 text-sm font-semibold text-[#6f4629]">{label}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
         </section>
 
         <section className="mt-10">
-          <h2 className="text-3xl font-bold text-[#5b341a] md:text-4xl">What We Offer</h2>
+          <h2 className="text-3xl font-bold text-[#5b341a] md:text-4xl">{t.about.offerTitle}</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {offerings.map((item: any) => (
-              <article
-                key={item.title}
-                className="rounded-2xl border border-[#e3d5c7] bg-[#fffaf3] p-5 shadow-[0_12px_28px_rgba(113,73,43,0.08)]"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="rounded-xl bg-[#f8ebdd] p-2">
-                    <item.icon className="h-5 w-5 text-[#a56131]" />
+            {t.about.offerings.map((item, index) => {
+              const IconComponent = OFFERING_ICONS[index] || ShieldCheck;
+              return (
+                <article
+                  key={item.title}
+                  className="rounded-2xl border border-[#e3d5c7] bg-[#fffaf3] p-5 shadow-[0_12px_28px_rgba(113,73,43,0.08)]"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-[#f8ebdd] p-2">
+                      <IconComponent className="h-5 w-5 text-[#a56131]" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-[#623a1f]">{item.title}</h3>
+                      <p className="mt-1 text-sm text-[#775c49] md:text-base">{item.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#623a1f]">{item.title}</h3>
-                    <p className="mt-1 text-sm text-[#775c49] md:text-base">{item.description}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </section>
 
@@ -117,8 +90,7 @@ export default function AboutPage() {
               <HandHeart className="h-5 w-5 text-[#a56131]" />
             </div>
             <p className="text-base text-[#745947] md:text-lg">
-              Destekly is built to protect dignity while unlocking opportunity through safe creativity, supervised support,
-              and accountable impact.
+              {t.about.footerQuote}
             </p>
           </div>
         </section>

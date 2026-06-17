@@ -151,6 +151,55 @@ const en = {
     raised: "Raised",
     needed: "needed",
   },
+  about: {
+    badge: "About Us",
+    title: "Destekly",
+    desc1: "Destekly is a supervised platform where children in foster care can create, earn, and grow in a safe and supportive environment.",
+    desc2: "Through verified foster homes and organizations, children can raise support for real needs and fund ideas they want to turn into reality. Supporters can donate and directly see the impact of their contributions through transparent updates.",
+    desc3: "We are not just a charity platform. Destekly combines support and opportunity while ensuring safety, accountability, and dignity at every step.",
+    descGoal: "Our goal is simple: to give every child the chance to build something of their own and shape a better future.",
+    offerTitle: "What We Offer",
+    offerings: [
+      {
+        title: "Donation Calls",
+        description: "Support specific needs with clear goals and transparency.",
+      },
+      {
+        title: "Idea Funding",
+        description: "Help bring children's ideas and projects to life.",
+      },
+      {
+        title: "Progress Updates",
+        description: "Track how contributions are used through real updates.",
+      },
+      {
+        title: "Clothing Support",
+        description: "Donate clothing essentials through verified requests from trusted organizations.",
+      },
+      {
+        title: "Verified System",
+        description: "All activity is managed by trusted foster homes and organizations.",
+      },
+    ],
+    impactBadge1: "Safe Child Profiles",
+    impactBadge2: "Verified Donation Calls",
+    impactBadge3: "Real Updates",
+    footerQuote: "Destekly is built to protect dignity while unlocking opportunity through safe creativity, supervised support, and accountable impact.",
+  },
+  clothes: {
+    badge: "Clothing Support",
+    title: "Clothing Support",
+    subtitle: "Support children with clean, seasonal clothing through verified organizations.",
+    empty: "No clothing support calls yet.",
+  },
+  updates: {
+    title: "Impact Updates",
+    subtitle: "Moderated progress stories after support is received.",
+    empty: "No updates published yet.",
+    by: "By",
+    postTitle: "Post an update",
+    postDesc: "Share your latest progress with text and photos.",
+  },
 };
 
 const az: typeof en = {
@@ -304,6 +353,55 @@ const az: typeof en = {
     raised: "Toplanıb",
     needed: "lazımdır",
   },
+  about: {
+    badge: "Haqqımızda",
+    title: "Destekly",
+    desc1: "Destekly, qayğı evlərindəki uşaqların təhlükəsiz və dəstəkləyici mühitdə yaradıcılıqla məşğul olması, qazanması və inkişaf etməsi üçün nəzarət edilən bir platformadır.",
+    desc2: "Doğrulanmış qayğı evləri və təşkilatlar vasitəsilə uşaqlar real ehtiyaclar üçün dəstək toplaya və reallaşdırmaq istədikləri ideyaları maliyyələşdirə bilərlər. Dəstəkçilər bağış edə bilər və şəffaf yeniliklər vasitəsilə öz töhfələrinin təsirini birbaşa görə bilərlər.",
+    desc3: "Biz sadəcə bir xeyriyyə platforması deyilik. Destekly hər addımda təhlükəsizliyi, hesabatlılığı və ləyaqəti təmin etməklə yanaşı, dəstək və imkanı birləşdirir.",
+    descGoal: "Məqsədimiz sadədir: hər bir uşağa özünə aid bir şey qurmaq və daha yaxşı gələcək formalaşdırmaq şansı vermək.",
+    offerTitle: "Nələr Təklif Edirik",
+    offerings: [
+      {
+        title: "Yardım Çağırışları",
+        description: "Aydın məqsədlər və şəffaflıqla xüsusi ehtiyacları dəstəkləyin.",
+      },
+      {
+        title: "İdeya Maliyyələşdirilməsi",
+        description: "Uşaqların ideyalarını və layihələrini həyata keçirməyə kömək edin.",
+      },
+      {
+        title: "İrəliləyiş Yenilikləri",
+        description: "Real yeniliklər vasitəsilə töhfələrin necə istifadə olunduğunu izləyin.",
+      },
+      {
+        title: "Geyim Dəstəyi",
+        description: "Etibarlı təşkilatların yoxlanılmış sorğuları vasitəsilə əsas geyimləri bağışlayın.",
+      },
+      {
+        title: "Doğrulanmış Sistem",
+        description: "Bütün fəaliyyət etibarlı qayğı evləri və təşkilatlar tərəfindən idarə olunur.",
+      },
+    ],
+    impactBadge1: "Təhlükəsiz Uşaq Profilləri",
+    impactBadge2: "Doğrulanmış Yardım Çağırışları",
+    impactBadge3: "Real Yeniliklər",
+    footerQuote: "Destekly təhlükəsiz yaradıcılıq, nəzarət edilən dəstək və hesabatlı təsir vasitəsilə ləyaqəti qorumaq və imkanlar yaratmaq üçün qurulub.",
+  },
+  clothes: {
+    badge: "Geyim dəstəyi",
+    title: "Geyim Dəstəyi",
+    subtitle: "Təsdiqlənmiş təşkilatlar vasitəsilə uşaqları təmiz və mövsümi geyimlərlə təmin edin.",
+    empty: "Hələ geyim dəstəyi sorğusu yoxdur.",
+  },
+  updates: {
+    title: "Təsir Yenilikləri",
+    subtitle: "Dəstək alındıqdan sonra paylaşılan yoxlanılmış irəliləyiş hekayələri.",
+    empty: "Hələ heç bir yenilik paylaşılmayıb.",
+    by: "Tərəfindən",
+    postTitle: "Yenilik paylaşın",
+    postDesc: "Mətn və fotoşəkillərlə ən son irəliləyişinizi paylaşın.",
+  },
 };
 
 const ru: typeof en = {
@@ -456,6 +554,55 @@ const ru: typeof en = {
     anonymous: "Анонимно",
     raised: "Собрано",
     needed: "необходимо",
+  },
+  about: {
+    badge: "О нас",
+    title: "Destekly",
+    desc1: "Destekly — это контролируемая платформа, на которой дети в приёмных семьях могут творить, зарабатывать и развиваться в безопасной и поддерживающей среде.",
+    desc2: "Через проверенные приёмные дома и организации дети могут собирать поддержку для реальных нужд и финансировать идеи, которые они хотят воплотить в реальность. Сторонники могут делать пожертвования и напрямую видеть результат своего вклада благодаря прозрачным обновлениям.",
+    desc3: "Мы не просто благотворительная платформа. Destekly сочетает в себе поддержку и возможности, обеспечивая безопасность, подотчетность и достоинство на каждом этапе.",
+    descGoal: "Наша цель проста: дать каждому ребенку шанс построить что-то свое и сформировать лучшее будущее.",
+    offerTitle: "Что мы предлагаем",
+    offerings: [
+      {
+        title: "Призывы к пожертвованиям",
+        description: "Поддерживайте конкретные нужды с четкими целями и прозрачностью.",
+      },
+      {
+        title: "Финансирование идей",
+        description: "Помогите воплотить в жизнь идеи и проекты детей.",
+      },
+      {
+        title: "Отчёты о результатах",
+        description: "Отслеживайте использование взносов с помощью реальных отчетов.",
+      },
+      {
+        title: "Помощь одеждой",
+        description: "Пожертвуйте одежду по проверенным запросам от надежных организаций.",
+      },
+      {
+        title: "Проверенная система",
+        description: "Вся деятельность управляется надежными приёмными домами и организациями.",
+      },
+    ],
+    impactBadge1: "Безопасные профили детей",
+    impactBadge2: "Проверенные призывы к пожертвованиям",
+    impactBadge3: "Реальные обновления",
+    footerQuote: "Destekly создан для защиты достоинства и открытия возможностей через безопасное творчество, контролируемую поддержку и подотчетный результат.",
+  },
+  clothes: {
+    badge: "Помощь одеждой",
+    title: "Помощь одеждой",
+    subtitle: "Обеспечьте детей чистой сезонной одеждой через проверенные организации.",
+    empty: "Пока нет запросов на помощь одеждой.",
+  },
+  updates: {
+    title: "Отчёты о результатах",
+    subtitle: "Проверенные истории прогресса после получения поддержки.",
+    empty: "Обновлений пока нет.",
+    by: "Автор:",
+    postTitle: "Опубликовать обновление",
+    postDesc: "Поделитесь последними новостями с текстом и фотографиями.",
   },
 };
 
