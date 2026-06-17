@@ -59,11 +59,11 @@ export function SiteHeaderClient() {
             </Link>
           ))}
           <Link
-            href="/admin"
+            href="/profile"
             onClick={() => setMenuOpen(false)}
             className="rounded-xl px-4 py-3 text-2xl font-semibold text-[#6f4629] transition hover:bg-[#f7ebdd] hover:text-[#a56131]"
           >
-            {t.nav.admin}
+            {t.nav.profile}
           </Link>
         </nav>
       </aside>

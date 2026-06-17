@@ -2,15 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function DeleteAccountButton() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onDelete = async () => {
     const confirmed = window.confirm(
-      "Delete this account and all linked data? This cannot be undone.",
+      t.profile.deleteAccountConfirm,
     );
     if (!confirmed) return;
 
@@ -21,7 +23,7 @@ export function DeleteAccountButton() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Could not delete account.");
+      setError(data.error ?? t.profile.deleteError);
       setLoading(false);
       return;
     }
@@ -31,13 +33,13 @@ export function DeleteAccountButton() {
   };
 
   return (
-    <div className="mt-4">
+    <div>
       <button
         onClick={onDelete}
         disabled={loading}
         className="rounded-full border border-rose-300 bg-rose-50 px-5 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 disabled:opacity-60"
       >
-        {loading ? "Deleting..." : "Delete This Account"}
+        {loading ? t.profile.deleting : t.profile.deleteAccount}
       </button>
       {error ? <p className="mt-2 text-sm text-rose-600">{error}</p> : null}
     </div>

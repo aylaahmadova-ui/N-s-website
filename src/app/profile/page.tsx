@@ -1,20 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Link from "next/link";
 import { requireAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { DeleteAccountButton } from "@/components/profile/delete-account-button";
-import { SignOutButton } from "@/components/profile/sign-out-button";
+import ProfileClient from "./profile-client";
+
+export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
   const { user, profile } = await requireAuth();
   const supabase = await createClient();
 
+  // 1. Fetch organization memberships
   const { data: membership } = await supabase
     .from("organization_members")
     .select("organization_id, role, organizations(id, display_name, legal_name, status, contact_email, website)")
     .eq("user_id", user.id);
 
-  const primaryOrganization = membership?.[0]?.organizations as
+  const firstOrg = membership?.[0]?.organizations;
+  const primaryOrganization = (Array.isArray(firstOrg) ? firstOrg[0] : firstOrg) as
     | {
         id: string;
         display_name: string;
@@ -24,86 +26,127 @@ export default async function ProfilePage() {
         website: string | null;
       }
     | undefined;
-  const isOrganization = profile?.role === "organization";
+
+  const mappedMemberships = (membership ?? []).map((m: any) => {
+    const org = Array.isArray(m.organizations) ? m.organizations[0] : m.organizations;
+    return {
+      organization_id: m.organization_id,
+      role: m.role,
+      organizations: org ? { display_name: org.display_name } : null,
+    };
+  });
+
+  // 2. Fetch role-specific data
+  let donations: any[] = [];
+  let supporterStats = {
+    totalDonated: 0,
+    donationCount: 0,
+    approvedCount: 0,
+    pendingCount: 0,
+    rejectedCount: 0,
+  };
+  let adminStats = {
+    pendingCampaigns: 0,
+    pendingUpdates: 0,
+    pendingOrganizations: 0,
+    pendingDonations: 0,
+  };
+
+  const isOrg = profile?.role === "organization";
+  const isAdmin = profile?.role === "admin";
+  const isSupporter = profile?.role === "supporter" || (!isOrg && !isAdmin);
+
+  if (isAdmin) {
+    const [campaignsRes, updatesRes, orgsRes, donationsRes] = await Promise.all([
+      supabase.from("campaigns").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("updates").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("organizations").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("campaign_donations").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    ]);
+
+    adminStats = {
+      pendingCampaigns: campaignsRes.count ?? 0,
+      pendingUpdates: updatesRes.count ?? 0,
+      pendingOrganizations: orgsRes.count ?? 0,
+      pendingDonations: donationsRes.count ?? 0,
+    };
+  }
+
+  if (isSupporter) {
+    // Look up by email in donor_registry
+    const { data: donor } = await supabase
+      .from("donor_registry")
+      .select("donor_id")
+      .eq("donor_email", user.email)
+      .maybeSingle();
+
+    if (donor) {
+      const { data: fetchedDonations } = await supabase
+        .from("campaign_donations")
+        .select("id, amount, status, created_at, is_anonymous, receipt_path, campaigns(title)")
+        .eq("donor_id", donor.donor_id)
+        .order("created_at", { ascending: false });
+
+      if (fetchedDonations) {
+        let totalDonated = 0;
+        let approvedCount = 0;
+        let pendingCount = 0;
+        let rejectedCount = 0;
+
+        for (const d of fetchedDonations) {
+          const amt = Number(d.amount ?? 0);
+          if (d.status === "approved") {
+            totalDonated += amt;
+            approvedCount++;
+          } else if (d.status === "pending") {
+            pendingCount++;
+          } else if (d.status === "rejected") {
+            rejectedCount++;
+          }
+        }
+
+        supporterStats = {
+          totalDonated,
+          donationCount: fetchedDonations.length,
+          approvedCount,
+          pendingCount,
+          rejectedCount,
+        };
+
+        // Generate secure signed URLs for donor's own receipts
+        donations = await Promise.all(
+          fetchedDonations.map(async (d) => {
+            let receiptUrl: string | null = null;
+            if (d.receipt_path) {
+              const { data: signed } = await supabase.storage
+                .from("donation-receipts")
+                .createSignedUrl(d.receipt_path, 3600);
+              receiptUrl = signed?.signedUrl ?? null;
+            }
+            return {
+              ...d,
+              receipt_url: receiptUrl,
+              amount: Number(d.amount ?? 0),
+              status: d.status,
+              created_at: d.created_at,
+              is_anonymous: d.is_anonymous,
+              campaigns: d.campaigns,
+            };
+          })
+        );
+      }
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-[#f6f1ea] px-6 py-10 md:px-10">
-      <div className="mx-auto max-w-4xl space-y-6">
-        <h1 className="text-4xl font-bold text-[#5c3418]">{isOrganization ? "Organization Profile" : "Your Profile"}</h1>
-
-        <section className="rounded-2xl border border-[#e3d5c7] bg-[#fff9f2] p-6">
-          <p className="text-sm uppercase tracking-[0.12em] text-[#9c5f30]">Account</p>
-          <div className="mt-3 space-y-2 text-[#6f513d]">
-            <p>
-              <span className="font-semibold">Name:</span> {profile?.full_name ?? "Not set"}
-            </p>
-            <p>
-              <span className="font-semibold">Email:</span> {user.email}
-            </p>
-            <p>
-              <span className="font-semibold">Role:</span> {profile?.role ?? "Not set"}
-            </p>
-          </div>
-          {profile?.role === "admin" ? (
-            <div className="mt-4">
-              <Link
-                href="/admin"
-                className="inline-flex items-center rounded-full bg-[#a56131] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#8f4f25]"
-              >
-                Open Admin Dashboard
-              </Link>
-            </div>
-          ) : null}
-          <SignOutButton />
-          <DeleteAccountButton />
-        </section>
-
-        {isOrganization ? (
-          <section className="rounded-2xl border border-[#e3d5c7] bg-[#fff9f2] p-6">
-            <p className="text-sm uppercase tracking-[0.12em] text-[#9c5f30]">Organization</p>
-            {primaryOrganization ? (
-              <div className="mt-3 space-y-2 text-[#6f513d]">
-                <p>
-                  <span className="font-semibold">Display Name:</span> {primaryOrganization.display_name}
-                </p>
-                <p>
-                  <span className="font-semibold">Legal Name:</span> {primaryOrganization.legal_name}
-                </p>
-                <p>
-                  <span className="font-semibold">Status:</span> {primaryOrganization.status}
-                </p>
-                <p>
-                  <span className="font-semibold">Contact Email:</span> {primaryOrganization.contact_email}
-                </p>
-                <p>
-                  <span className="font-semibold">Website:</span> {primaryOrganization.website ?? "Not set"}
-                </p>
-              </div>
-            ) : (
-              <p className="mt-3 text-[#6f513d]">
-                Organization details are not linked yet. Submit your organization application to create the profile.
-              </p>
-            )}
-          </section>
-        ) : null}
-
-        <section className="rounded-2xl border border-[#e3d5c7] bg-white p-6">
-          <p className="text-sm uppercase tracking-[0.12em] text-[#9c5f30]">Organization Membership</p>
-          {membership?.length ? (
-            <ul className="mt-3 space-y-2 text-[#6f513d]">
-              {membership.map((item: any) => (
-                <li key={item.organization_id}>
-                  Org: {(item.organizations as { display_name?: string } | null)?.display_name ?? item.organization_id} (
-                  {item.role})
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-3 text-[#6f513d]">No organization memberships linked yet.</p>
-          )}
-        </section>
-
-      </div>
-    </div>
+    <ProfileClient
+      user={{ email: user.email ?? "" }}
+      profile={profile}
+      donations={donations}
+      supporterStats={isSupporter ? supporterStats : undefined}
+      adminStats={isAdmin ? adminStats : undefined}
+      organization={primaryOrganization}
+      memberships={mappedMemberships}
+    />
   );
 }

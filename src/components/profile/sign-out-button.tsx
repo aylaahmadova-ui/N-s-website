@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function SignOutButton() {
+  const { t } = useLanguage();
   const router = useRouter();
 
   const onSignOut = async () => {
@@ -13,8 +15,8 @@ export function SignOutButton() {
   };
 
   return (
-    <Button type="button" variant="secondary" onClick={onSignOut} className="mt-4">
-      Sign Out
+    <Button type="button" variant="secondary" onClick={onSignOut}>
+      {t.profile.signOut}
     </Button>
   );
 }
