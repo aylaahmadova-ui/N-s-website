@@ -105,7 +105,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
   return (
     <div className="relative w-full md:w-auto">
       <Card
-        className={`flex h-[23.5rem] w-full min-w-0 max-w-none flex-col overflow-hidden rounded-3xl glass-panel glass-panel-hover p-0 md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem] ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
+        className={`flex min-h-[23.5rem] h-auto w-full min-w-0 max-w-none flex-col overflow-hidden rounded-3xl glass-panel glass-panel-hover p-0 md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem] ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
       >
         <div className={`m-3 overflow-hidden rounded-2xl bg-[#f4e8dc] ${clothesOnly ? "h-44 md:h-40" : "h-36"}`}>
           {imageUrl ? (
