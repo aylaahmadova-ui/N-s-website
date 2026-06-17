@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -61,6 +62,11 @@ export async function POST(request: Request) {
     action,
     notes: notes ?? `Admin ${action} donation`,
   });
+
+  // Bust caches affected by donation status changes
+  revalidateTag("recognition-ranked-donors", "max");
+  revalidateTag("campaigns-published", "max");
+  revalidateTag("campaigns-clothes-published", "max");
 
   return NextResponse.json({ ok: true, action });
 }

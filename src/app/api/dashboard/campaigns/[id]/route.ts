@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdminApiAccess } from "@/lib/admin-access";
@@ -15,6 +16,9 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
+  revalidateTag("campaigns-published", "max");
+  revalidateTag("campaigns-clothes-published", "max");
+
   return NextResponse.json({ ok: true });
 }
 
@@ -31,6 +35,9 @@ export async function PATCH(request: Request, { params }: Params) {
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
+
+  revalidateTag("campaigns-published", "max");
+  revalidateTag("campaigns-clothes-published", "max");
 
   return NextResponse.json({ ok: true });
 }

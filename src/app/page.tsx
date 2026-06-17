@@ -38,7 +38,7 @@ export default function HomePage() {
   const { t } = useLanguage();
   const { hero, features, quote, contact } = t;
 
-  const headingWords = ["Start", "with", "Destekly"];
+  const headingWords = (hero.title || "Start with Destekly").split(" ");
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -99,7 +99,7 @@ export default function HomePage() {
                   <span key={word} className="heading-glint-word">
                     {word.split("").map((char, charIndex) => {
                       const index = charsBefore + charIndex;
-                      const isAccent = index >= 11;
+                      const isAccent = word.toLowerCase().includes("destekly");
                       return (
                         <span
                           key={`${word}-${char}-${charIndex}`}

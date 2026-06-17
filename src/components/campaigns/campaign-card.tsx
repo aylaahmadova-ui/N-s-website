@@ -105,9 +105,9 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
   return (
     <div className="relative w-full md:w-auto">
       <Card
-        className={`flex h-[23.5rem] w-full min-w-0 max-w-none flex-col overflow-hidden rounded-2xl border-[#eadccf] bg-white p-0 transition hover:-translate-y-0.5 hover:shadow-md md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem] ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
+        className={`flex h-[23.5rem] w-full min-w-0 max-w-none flex-col overflow-hidden rounded-3xl glass-panel glass-panel-hover p-0 md:w-[16.5rem] md:max-w-[16.5rem] md:min-w-[16.5rem] ${visuallyDone ? "grayscale-[0.35] opacity-75" : ""}`}
       >
-        <div className={`m-3 overflow-hidden rounded-xl bg-[#f4e8dc] ${clothesOnly ? "h-44 md:h-40" : "h-36"}`}>
+        <div className={`m-3 overflow-hidden rounded-2xl bg-[#f4e8dc] ${clothesOnly ? "h-44 md:h-40" : "h-36"}`}>
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
@@ -121,13 +121,13 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
         </div>
 
         <div className="flex flex-1 flex-col px-4 pb-4">
-          <h2 className="text-base font-semibold leading-tight text-[#61341c]">{title}</h2>
-          <p className="mt-1 line-clamp-2 text-sm text-[#786455]">{summary}</p>
+          <h2 className="text-base font-bold leading-tight text-[#5c3418]">{title}</h2>
+          <p className="mt-1 line-clamp-2 text-xs text-[#735847]">{summary}</p>
           {!clothesOnly ? <p className="pt-1 text-sm font-bold text-[#8b4e22]">{t.common.raised} AZN {Number(amountRaised ?? 0).toFixed(2)} / AZN {Number(amountNeeded ?? 0).toFixed(2)}</p> : null}
 
           <div className="mt-auto flex items-center gap-2 pt-2">
             {!clothesOnly ? (
-              <button type="button" onClick={openHistory} className="rounded-lg border border-[#d7bca5] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#7d4d2a] transition hover:bg-[#fff5eb]">
+              <button type="button" onClick={openHistory} className="rounded-xl border border-[#e3d5c7] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#623a1f] transition hover:bg-[#fdf7f1]">
                 <span className="inline-flex items-center gap-1">
                   <History className="h-3.5 w-3.5" />
                   {t.donation.history}
@@ -141,7 +141,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
                 resetDonateFlow();
                 setOpen(true);
               }}
-              className="rounded-lg bg-[#a95d2b] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#954e21] disabled:cursor-not-allowed disabled:bg-slate-400"
+              className="rounded-xl bg-[#a56131] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#8e4f25] disabled:cursor-not-allowed disabled:bg-slate-400"
             >
               {clothesOnly ? (visuallyDone ? t.donation.done : t.donation.contact) : fullyFunded ? t.donation.fullyFunded : t.donation.donate}
             </button>
@@ -200,10 +200,10 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
               <div className="mt-3 space-y-3">
                 <p className="text-sm text-slate-600">{t.donation.donatedBefore}</p>
                 <div className="flex gap-2">
-                  <button type="button" className={`rounded-md px-3 py-2 text-sm ${donorType === "new" ? "bg-[#a95d2b] text-white" : "bg-slate-100"}`} onClick={() => setDonorType("new")}>
+                  <button type="button" className={`rounded-xl px-3 py-2 text-sm transition ${donorType === "new" ? "bg-[#a56131] text-white" : "bg-[#fcf7f1] border border-[#e3d5c7] text-[#623a1f]"}`} onClick={() => setDonorType("new")}>
                     {t.donation.no}
                   </button>
-                  <button type="button" className={`rounded-md px-3 py-2 text-sm ${donorType === "existing" ? "bg-[#a95d2b] text-white" : "bg-slate-100"}`} onClick={() => setDonorType("existing")}>
+                  <button type="button" className={`rounded-xl px-3 py-2 text-sm transition ${donorType === "existing" ? "bg-[#a56131] text-white" : "bg-[#fcf7f1] border border-[#e3d5c7] text-[#623a1f]"}`} onClick={() => setDonorType("existing")}>
                     {t.donation.yes}
                   </button>
                 </div>
@@ -222,7 +222,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
                     {!selectedDonorId ? (
                       <button
                         type="button"
-                        className="rounded-md bg-[#a95d2b] px-3 py-2 text-sm font-semibold text-white"
+                        className="rounded-xl bg-[#a56131] hover:bg-[#8e4f25] px-4 py-2.5 text-sm font-semibold text-white transition"
                         onClick={async () => {
                           setError(null);
                           const res = await fetch("/api/campaigns/donor-id", {
@@ -255,7 +255,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
                     {!selectedDonorId ? (
                       <button
                         type="button"
-                        className="rounded-md border border-[#d7bca5] bg-white px-3 py-2 text-sm font-semibold text-[#7d4d2a]"
+                        className="rounded-xl border border-[#e3d5c7] bg-white px-4 py-2.5 text-sm font-semibold text-[#623a1f] hover:bg-[#fdf7f1] transition"
                         onClick={async () => {
                           setError(null);
                           const res = await fetch("/api/campaigns/donor-id", {
@@ -290,8 +290,8 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
               <div className="mt-3 space-y-3">
                 <p className="text-sm text-slate-700">{t.donation.visibilityQuestion}</p>
                 <div className="flex gap-2">
-                  <button type="button" className={`rounded-md px-3 py-2 text-sm ${visibility === "anonymous" ? "bg-[#a95d2b] text-white" : "bg-slate-100"}`} onClick={() => setVisibility("anonymous")}>{t.donation.anonymous}</button>
-                  <button type="button" className={`rounded-md px-3 py-2 text-sm ${visibility === "name" ? "bg-[#a95d2b] text-white" : "bg-slate-100"}`} onClick={() => setVisibility("name")}>{t.donation.showMyName}</button>
+                  <button type="button" className={`rounded-xl px-3 py-2 text-sm transition ${visibility === "anonymous" ? "bg-[#a56131] text-white" : "bg-[#fcf7f1] border border-[#e3d5c7] text-[#623a1f]"}`} onClick={() => setVisibility("anonymous")}>{t.donation.anonymous}</button>
+                  <button type="button" className={`rounded-xl px-3 py-2 text-sm transition ${visibility === "name" ? "bg-[#a56131] text-white" : "bg-[#fcf7f1] border border-[#e3d5c7] text-[#623a1f]"}`} onClick={() => setVisibility("name")}>{t.donation.showMyName}</button>
                 </div>
                 <div className="rounded-md border border-[#e3d5c7] bg-[#fffaf5] p-2 text-sm text-[#6f5a49]">
                   {t.donation.selectedDonor} <span className="font-semibold">{selectedDonorName}</span>
@@ -307,8 +307,8 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
                   <p className="mt-1 break-all text-base font-bold text-[#5f3520]">{cardNumber || t.donation.cardNumberMissing}</p>
                 </div>
                 <input className="w-full rounded-md border border-slate-300 px-3 py-2" type="number" min="1" step="0.01" placeholder={t.donation.amountPlaceholder} value={amount} onChange={(e) => setAmount(e.target.value)} />
-                <div className="rounded-lg border border-[#e3d5c7] bg-[#fffaf5] p-3">
-                  <label htmlFor={`receipt-${id}`} className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-[#ddc9b7] bg-white px-3 py-2 text-sm font-semibold text-[#7d4d2a] hover:bg-[#fff3e6]">
+                <div className="rounded-2xl border border-[#e3d5c7] bg-[#fffaf6] p-4 shadow-sm">
+                  <label htmlFor={`receipt-${id}`} className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#e3d5c7] bg-white px-3 py-2 text-sm font-semibold text-[#623a1f] hover:bg-[#fdf7f1] transition">
                     {isUploadingReceipt ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                     {isUploadingReceipt ? t.donation.uploading : t.donation.uploadReceipt}
                   </label>
@@ -352,13 +352,13 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
 
             {error ? <p className="mt-2 text-sm text-rose-600">{error}</p> : null}
 
-            <div className="mt-4 flex justify-end gap-2">
-              <button type="button" className="rounded-md px-3 py-2 text-sm" onClick={() => { setOpen(false); resetDonateFlow(); }}>{t.donation.close}</button>
-              {!clothesOnly && step > 1 ? <button type="button" className="rounded-md border border-slate-300 px-3 py-2 text-sm" onClick={() => setStep((prev) => (prev === 3 ? 2 : 1))}>{t.donation.back}</button> : null}
+            <div className="mt-5 flex justify-end gap-2 border-t border-[#e3d5c7]/40 pt-4">
+              <button type="button" className="rounded-xl border border-[#e3d5c7] bg-white px-4 py-2 text-sm font-semibold text-[#623a1f] hover:bg-[#fdf7f1] transition" onClick={() => { setOpen(false); resetDonateFlow(); }}>{t.donation.close}</button>
+              {!clothesOnly && step > 1 ? <button type="button" className="rounded-xl border border-[#e3d5c7] bg-white px-4 py-2 text-sm font-semibold text-[#623a1f] hover:bg-[#fdf7f1] transition" onClick={() => setStep((prev) => (prev === 3 ? 2 : 1))}>{t.donation.back}</button> : null}
               {!clothesOnly && step < 3 ? (
                 <button
                   type="button"
-                  className="rounded-md bg-[#a95d2b] px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-400"
+                  className="rounded-xl bg-[#a56131] hover:bg-[#8e4f25] px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-slate-400"
                   disabled={step === 1 && !identityReady}
                   onClick={() => {
                     if (step === 1 && !identityReady) return setError(t.donation.completeIdentity);
@@ -372,7 +372,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
                 <button
                   type="button"
                   disabled={!canDonate}
-                  className="rounded-md bg-[#a95d2b] px-3 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-400"
+                  className="rounded-xl bg-[#a56131] hover:bg-[#8e4f25] px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-slate-400"
                   onClick={async () => {
                     setLoading(true);
                     setError(null);
