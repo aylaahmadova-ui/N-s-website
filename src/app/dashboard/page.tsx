@@ -9,19 +9,22 @@ import { StatusPill } from "@/components/ui/status-pill";
 export default async function DashboardPage() {
   const { user, profile } = await requireRole(["organization", "admin"]);
   const supabase = await createClient();
-
-  const organization = await getOrganizationContext(user.id);
   const isAdmin = profile?.role === "admin";
 
+  // Get organization context first (needed for count filters)
+  const organization = await getOrganizationContext(user.id);
+  const orgId = organization?.id ?? "00000000-0000-0000-0000-000000000000";
+
+  // Run both count queries in parallel
   const [{ count: campaignCount }, { count: updateCount }] = await Promise.all([
     supabase
       .from("campaigns")
       .select("*", { count: "exact", head: true })
-      .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
+      .eq("organization_id", orgId),
     supabase
       .from("updates")
       .select("*", { count: "exact", head: true })
-      .eq("organization_id", organization?.id ?? "00000000-0000-0000-0000-000000000000"),
+      .eq("organization_id", orgId),
   ]);
 
   if (!organization && !isAdmin) {

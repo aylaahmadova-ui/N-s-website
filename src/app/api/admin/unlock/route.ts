@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "ADMIN_PASSCODE is not configured." }, { status: 500 });
   }
 
-  if (!passcode || passcode !== expected) {
+  if (!passcode || passcode.trim() !== expected) {
     return NextResponse.json({ error: "Invalid passcode." }, { status: 401 });
   }
 

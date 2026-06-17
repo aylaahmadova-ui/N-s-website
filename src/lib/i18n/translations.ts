@@ -14,6 +14,7 @@ const en = {
   },
   hero: {
     badge: "SUPERVISED SUPPORT PLATFORM",
+    title: "Start with Destekly",
     subtitle:
       "Empowering foster homes and trusted NGOs to raise transparent support, fund projects, and track impact. A place where every contribution helps a child grow and thrive.",
     contactUs: "Contact Us",
@@ -263,6 +264,7 @@ const az: typeof en = {
   },
   hero: {
     badge: "ETİBARLI DƏSTƏK PLATFORMU",
+    title: "Destekly ilə başlayın",
     subtitle:
       "Qayğı evlərinə və etibarlı QHT-lərə şəffaf şəkildə dəstək toplamağa, layihələri maliyyələşdirməyə və təsiri izləməyə imkan verir. Hər dəstək bir uşağın böyüməsinə dəstək olur.",
     contactUs: "Əlaqə",
@@ -315,7 +317,7 @@ const az: typeof en = {
     ],
   },
   quote: {
-    text: "\"Hər uşağın bir qəhrəmana ehtiyacı var — ondan heç vaxt əl çəkməyəcək, onun bacarıqlarına inanan və onun yanında olacaq bir insan.\"",
+    text: "\"Hər uşağın bir qəhrəmana ehtiyacı var, ondan heç vaxt əl çəkməyəcək, onun bacarıqlarına inanan və onun yanında olacaq bir insan.\"",
     author: "— Rita Pierson",
   },
   contact: {
@@ -512,6 +514,7 @@ const ru: typeof en = {
   },
   hero: {
     badge: "ПЛАТФОРМА КОНТРОЛИРУЕМОЙ ПОДДЕРЖКИ",
+    title: "Начните с Destekly",
     subtitle:
       "Помогаем приёмным домам и проверенным НКО собирать прозрачную поддержку, финансировать проекты и отслеживать результаты. Место, где каждый вклад помогает ребёнку расти и процветать.",
     contactUs: "Связаться с нами",

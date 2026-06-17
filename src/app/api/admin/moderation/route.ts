@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -35,6 +36,16 @@ export async function POST(request: Request) {
     action: status,
     notes: notes ?? "Admin moderation action",
   });
+
+  // Bust the cached public data for the affected table
+  if (table === "campaigns") {
+    revalidateTag("campaigns-published", "max");
+    revalidateTag("campaigns-clothes-published", "max");
+  } else if (table === "updates") {
+    revalidateTag("updates-published", "max");
+  } else if (table === "projects") {
+    revalidateTag("projects-published", "max");
+  }
 
   return NextResponse.json({ ok: true });
 }

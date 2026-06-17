@@ -2,25 +2,34 @@ import { type NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
-export async function middleware(request: NextRequest) {
-  const response = await updateSession(request);
+// Routes that require auth session refresh (everything else is public)
+const PROTECTED_PREFIXES = ["/dashboard", "/profile", "/apply", "/admin", "/api"];
 
+function isProtectedRoute(pathname: string) {
+  return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  // Admin passcode check (runs before session refresh for speed)
   if (pathname.startsWith("/admin") && pathname !== "/admin/unlock") {
-    const passcode = process.env.ADMIN_PASSCODE;
+    const passcode = process.env.ADMIN_PASSCODE?.trim();
     const token = request.cookies.get("destekly_admin")?.value;
     if (!passcode || token !== passcode) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/unlock";
-      const redirectResponse = NextResponse.redirect(url);
-      response.cookies.getAll().forEach((cookie) => {
-        redirectResponse.cookies.set(cookie);
-      });
-      return redirectResponse;
+      return NextResponse.redirect(url);
     }
   }
 
-  return response;
+  // Skip the expensive auth session refresh for public routes
+  if (!isProtectedRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Only refresh Supabase auth session for protected routes
+  return await updateSession(request);
 }
 
 export const config = {

@@ -2,6 +2,7 @@
 import { requireRole } from "@/lib/auth";
 import { getOrganizationContext } from "@/lib/dashboard";
 import { createClient } from "@/lib/supabase/server";
+import { isAdminUnlocked } from "@/lib/admin-access";
 import { DashboardNav } from "@/components/layout/dashboard-nav";
 import { Card } from "@/components/ui/card";
 import { StatusPill } from "@/components/ui/status-pill";
@@ -11,6 +12,7 @@ export default async function CampaignsDashboardPage() {
   const { user } = await requireRole(["organization"]);
   const organization = await getOrganizationContext(user.id);
   const supabase = await createClient();
+  const adminUnlocked = await isAdminUnlocked();
 
   const { data: campaigns } = await supabase
     .from("campaigns")
@@ -24,7 +26,11 @@ export default async function CampaignsDashboardPage() {
         <DashboardNav />
         <div className="space-y-5">
           <Card title="Create donation call" description="Donation call requests enter moderation before publication.">
-            <ContentForm endpoint="/api/dashboard/campaigns" includeAmount actionLabel="Submit donation call" />
+            {adminUnlocked ? (
+              <ContentForm endpoint="/api/dashboard/campaigns" includeAmount actionLabel="Submit donation call" />
+            ) : (
+              <p className="text-sm text-slate-600">Admin unlock is required to post donation calls.</p>
+            )}
           </Card>
           <Card title="Your donation calls">
             <div className="space-y-3">
