@@ -5,18 +5,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-
-const menuItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Donation Calls", href: "/campaigns" },
-  { label: "Recognition", href: "/recognition" },
-  { label: "Clothing Support", href: "/clothes-donation" },
-  { label: "Updates", href: "/updates" },
-];
+import { LangSwitcher } from "@/components/layout/lang-switcher";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function SiteHeaderClient() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const menuItems = [
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.about, href: "/about" },
+    { label: t.nav.donationCalls, href: "/campaigns" },
+    { label: t.nav.recognition, href: "/recognition" },
+    { label: t.nav.clothingSupport, href: "/clothes-donation" },
+    { label: t.nav.updates, href: "/updates" },
+  ];
 
   useEffect(() => {
     function handleOpenMenu() {
@@ -35,7 +38,7 @@ export function SiteHeaderClient() {
         }`}
       >
         <div className="mb-8 flex items-center justify-between">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#6f4629]">Menu</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#6f4629]">{t.nav.menu}</p>
           <button
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
@@ -47,7 +50,7 @@ export function SiteHeaderClient() {
         <nav className="flex flex-col gap-2">
           {menuItems.map((item: any) => (
             <Link
-              key={item.label}
+              key={item.href}
               href={item.href}
               onClick={() => setMenuOpen(false)}
               className="rounded-xl px-4 py-3 text-2xl font-semibold text-[#6f4629] transition hover:bg-[#f7ebdd] hover:text-[#a56131]"
@@ -56,11 +59,11 @@ export function SiteHeaderClient() {
             </Link>
           ))}
           <Link
-            href="/admin"
+            href="/profile"
             onClick={() => setMenuOpen(false)}
             className="rounded-xl px-4 py-3 text-2xl font-semibold text-[#6f4629] transition hover:bg-[#f7ebdd] hover:text-[#a56131]"
           >
-            Admin
+            {t.nav.profile}
           </Link>
         </nav>
       </aside>
@@ -91,7 +94,9 @@ export function SiteHeaderClient() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3" />
+          <div className="flex items-center gap-3">
+            <LangSwitcher />
+          </div>
         </div>
       </header>
     </>

@@ -22,19 +22,28 @@ export async function GET(request: Request) {
   const admin = createAdminClient();
   const adminUnlocked = await isAdminUnlocked();
 
-  const { data, error } = await admin
+  // Public sees only approved; admin sees all
+  let query = admin
     .from("campaign_donations")
-    .select("id, donor_name, is_anonymous, amount, receipt_path, created_at, donor_registry(donor_surname)")
+    .select("id, donor_name, is_anonymous, amount, receipt_path, status, created_at, donor_registry(donor_surname)")
     .eq("campaign_id", parsed.data.campaignId)
     .order("created_at", { ascending: false })
     .limit(100);
+
+  if (!adminUnlocked) {
+    query = query.eq("status", "approved");
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapped = await Promise.all(
-    (data ?? []).map(async (item) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (data ?? []).map(async (item: any) => {
       const registry = Array.isArray(item.donor_registry) ? item.donor_registry[0] : item.donor_registry;
       const donorSurname = registry?.donor_surname?.trim() ?? "";
       const fullName = [item.donor_name?.trim(), donorSurname].filter(Boolean).join(" ").trim();
@@ -51,6 +60,7 @@ export async function GET(request: Request) {
         donorName: item.is_anonymous ? "Anonymous" : fullName || item.donor_name,
         amount: Number(item.amount ?? 0),
         createdAt: item.created_at,
+        status: item.status,
         receiptUrl,
       };
     }),

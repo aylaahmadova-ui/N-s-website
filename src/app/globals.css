@@ -78,3 +78,23 @@ main {
     text-shadow: 0 0 0 rgba(255, 255, 255, 0);
   }
 }
+
+/* Glassmorphism Redesign Classes */
+.glass-panel {
+  background: rgba(253, 250, 246, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(227, 213, 199, 0.65);
+  box-shadow: 0 10px 35px -5px rgba(113, 73, 43, 0.06), 0 8px 16px -6px rgba(113, 73, 43, 0.04);
+}
+
+.glass-panel-hover {
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(253, 250, 246, 0.96);
+  border-color: rgba(165, 97, 49, 0.35);
+  box-shadow: 0 20px 45px -10px rgba(113, 73, 43, 0.16), 0 10px 20px -8px rgba(113, 73, 43, 0.1);
+  transform: translateY(-5px);
+}
+
