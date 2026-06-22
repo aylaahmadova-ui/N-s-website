@@ -381,8 +381,7 @@ export function CampaignCard({ id, title, summary, imageUrl, cardNumber, contact
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
                         campaignId: id,
-                        donorName: selectedDonorName,
-                        donorId: selectedDonorId,
+                        donorEmail: donorEmail.trim().toLowerCase(),
                         isAnonymous: visibility === "anonymous",
                         amount,
                         receiptPath,

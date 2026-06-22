@@ -1,4 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/context";
 
 type Status = "pending" | "approved" | "rejected" | "published" | "draft";
 
@@ -11,9 +14,10 @@ const statusStyles: Record<Status, string> = {
 };
 
 export function StatusPill({ status }: { status: Status }) {
+  const { t } = useLanguage();
   return (
-    <span className={cn("rounded-full px-2 py-1 text-xs font-semibold capitalize", statusStyles[status])}>
-      {status}
+    <span className={cn("rounded-full px-2 py-1 text-xs font-semibold", statusStyles[status])}>
+      {t.status[status]}
     </span>
   );
 }

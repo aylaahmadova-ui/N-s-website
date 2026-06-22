@@ -8,11 +8,13 @@ import { z } from "zod";
 import { loginSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -35,7 +37,7 @@ export function LoginForm() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Login failed.");
+      setError(data.error ?? t.forms.loginFailed);
       return;
     }
 
@@ -45,11 +47,11 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Input label="Email" type="email" {...register("email")} error={errors.email?.message} />
-      <Input label="Password" type="password" {...register("password")} error={errors.password?.message} />
+      <Input label={t.forms.email} type="email" {...register("email")} error={errors.email?.message} />
+      <Input label={t.forms.password} type="password" {...register("password")} error={errors.password?.message} />
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Signing in..." : "Sign in"}
+        {isSubmitting ? t.forms.signingIn : t.forms.signIn}
       </Button>
     </form>
   );

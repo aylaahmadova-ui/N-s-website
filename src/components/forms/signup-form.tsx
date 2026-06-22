@@ -9,11 +9,13 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.infer<typeof signUpSchema>;
 
 export function SignupForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,41 +50,41 @@ export function SignupForm() {
     }
 
     if (!response.ok) {
-      setError(data.error ?? "Sign up failed.");
+      setError(data.error ?? t.forms.signUpFailed);
       return;
     }
 
-    setMessage("Account created successfully.");
+    setMessage(t.forms.accountCreated);
     router.push(data.redirectTo ?? "/profile");
     router.refresh();
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Input label="Full name" {...register("fullName")} error={errors.fullName?.message} />
-      <Input label="Email" type="email" {...register("email")} error={errors.email?.message} />
-      <Input label="Password" type="password" {...register("password")} error={errors.password?.message} />
+      <Input label={t.forms.fullName} {...register("fullName")} error={errors.fullName?.message} />
+      <Input label={t.forms.email} type="email" {...register("email")} error={errors.email?.message} />
+      <Input label={t.forms.password} type="password" {...register("password")} error={errors.password?.message} />
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-700">Account type</label>
+        <label className="text-sm font-medium text-slate-700">{t.forms.accountType}</label>
         <select
           className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
           {...register("accountType")}
         >
-          <option value="supporter">Supporter</option>
-          <option value="organization">Organization</option>
+          <option value="supporter">{t.forms.supporter}</option>
+          <option value="organization">{t.forms.organization}</option>
         </select>
       </div>
 
       {accountType === "organization" ? (
         <>
           <Input
-            label="Organization name"
+            label={t.forms.organizationName}
             {...register("organizationName")}
             error={errors.organizationName?.message}
           />
           <Textarea
-            label="Organization mission"
+            label={t.forms.organizationMission}
             rows={4}
             {...register("organizationMission")}
             error={errors.organizationMission?.message}
@@ -94,7 +96,7 @@ export function SignupForm() {
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Creating..." : "Create account"}
+        {isSubmitting ? t.forms.creating : t.forms.createAccount}
       </Button>
     </form>
   );

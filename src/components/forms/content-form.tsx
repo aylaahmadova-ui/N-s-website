@@ -9,6 +9,7 @@ import { contentSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.input<typeof contentSchema>;
 
@@ -24,6 +25,7 @@ export function ContentForm({
   actionLabel: string;
 }) {
   const router = useRouter();
+  const { t } = useLanguage();
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -47,7 +49,7 @@ export function ContentForm({
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Could not submit.");
+      setError(data.error ?? t.forms.couldNotSubmitGeneric);
       return;
     }
 
@@ -57,11 +59,11 @@ export function ContentForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-      <Input label="Title" {...register("title")} error={errors.title?.message} />
-      <Textarea label="Summary" rows={4} {...register("summary")} error={errors.summary?.message} />
+      <Input label={t.forms.title} {...register("title")} error={errors.title?.message} />
+      <Textarea label={t.forms.summary} rows={4} {...register("summary")} error={errors.summary?.message} />
       {includePrice ? (
         <Input
-          label="Price (AZN)"
+          label={t.forms.priceAzn}
           type="number"
           step="0.01"
           {...register("price")}
@@ -70,7 +72,7 @@ export function ContentForm({
       ) : null}
       {includeAmount ? (
         <Input
-          label="Amount needed (AZN)"
+          label={t.forms.amountNeededAzn}
           type="number"
           step="0.01"
           {...register("amount_needed")}
@@ -79,7 +81,7 @@ export function ContentForm({
       ) : null}
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : actionLabel}
+        {isSubmitting ? t.forms.saving : actionLabel}
       </Button>
     </form>
   );

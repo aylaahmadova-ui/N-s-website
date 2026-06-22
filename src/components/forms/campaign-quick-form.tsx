@@ -10,6 +10,7 @@ import { contentSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.input<typeof contentSchema>;
 
@@ -21,6 +22,7 @@ export function CampaignQuickForm({
   campaignType?: "general" | "clothes";
 }) {
   const router = useRouter();
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -62,7 +64,7 @@ export function CampaignQuickForm({
 
       const data = await response.json();
       if (!response.ok) {
-        setError(data.error ?? "Could not upload image.");
+        setError(data.error ?? t.forms.couldNotUploadImage);
         return;
       }
 
@@ -70,7 +72,7 @@ export function CampaignQuickForm({
       setValue("image_url", imageUrl, { shouldDirty: true, shouldValidate: true });
       setPreviewUrl(imageUrl);
     } catch {
-      setError("Could not upload image.");
+      setError(t.forms.couldNotUploadImage);
     } finally {
       setIsUploadingImage(false);
     }
@@ -97,7 +99,7 @@ export function CampaignQuickForm({
     }
 
     if (!response.ok) {
-      setError(data.error ?? "Could not submit donation call.");
+      setError(data.error ?? t.forms.couldNotSubmitDonation);
       return;
     }
 
@@ -112,7 +114,7 @@ export function CampaignQuickForm({
       <div>
         <Button type="button" onClick={() => setIsOpen(true)} className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm shadow-sm">
           <Plus className="h-4 w-4" />
-          Post donation call
+          {t.forms.postDonationCall}
         </Button>
       </div>
     );
@@ -127,14 +129,14 @@ export function CampaignQuickForm({
           className="inline-flex items-center gap-1 rounded-md border border-[#e4d2c1] px-3 py-1 text-xs font-semibold text-[#7a4b2a] transition hover:bg-[#fff7ef]"
         >
           <X className="h-3.5 w-3.5" />
-          Close
+          {t.forms.close}
         </button>
       </div>
 
-      <Input label="Donation call title" placeholder="Winter essentials support" {...register("title")} error={errors.title?.message} />
+      <Input label={t.forms.donationCallTitle} placeholder="Winter essentials support" {...register("title")} error={errors.title?.message} />
 
       <Textarea
-        label="Description"
+        label={t.forms.description}
         rows={4}
         placeholder="Explain the real need, urgency, and who it helps."
         {...register("summary")}
@@ -143,7 +145,7 @@ export function CampaignQuickForm({
 
       {!hideFundingGoal ? (
         <Input
-          label="Funding goal (AZN)"
+          label={t.forms.fundingGoal}
           type="number"
           step="0.01"
           min={0}
@@ -156,7 +158,7 @@ export function CampaignQuickForm({
       )}
 
       <Input
-        label="Phone number"
+        label={t.forms.phoneNumber}
         type="text"
         placeholder="+994..."
         {...register("contact_number" as any)}
@@ -164,7 +166,7 @@ export function CampaignQuickForm({
       />
 
       <Input
-        label="Image URL (optional)"
+        label={t.forms.imageUrl}
         type="url"
         placeholder="https://..."
         {...imageField}
@@ -176,13 +178,13 @@ export function CampaignQuickForm({
       />
 
       <div className="rounded-xl border border-[#ddc9b7] bg-[#fffaf6] p-3">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#7a4b2a]">Upload image</p>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#7a4b2a]">{t.forms.uploadImageLabel}</p>
         <label
           htmlFor="campaign-image-file"
           className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#e4d2c1] bg-white px-3 py-2 text-sm font-medium text-[#7a4b2a] transition hover:bg-[#fff7ef]"
         >
           {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
-          {isUploadingImage ? "Uploading..." : "Choose image from device"}
+          {isUploadingImage ? t.forms.uploading : t.forms.chooseImage}
         </label>
         <input
           id="campaign-image-file"
@@ -192,7 +194,7 @@ export function CampaignQuickForm({
           disabled={isUploadingImage}
           onChange={(event) => onImageFileSelected(event.target.files?.[0] ?? null)}
         />
-        <p className="mt-2 text-xs text-[#7b6857]">Max size 5MB. PNG, JPG, WEBP, GIF.</p>
+        <p className="mt-2 text-xs text-[#7b6857]">{t.forms.imageMaxSize}</p>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-amber-200 bg-amber-50/60">
@@ -202,7 +204,7 @@ export function CampaignQuickForm({
         ) : (
           <div className="flex h-36 items-center justify-center gap-2 text-sm text-amber-800">
             <Camera className="h-4 w-4" />
-            Donation call image preview appears here
+            {t.forms.imagePreviewing}
           </div>
         )}
       </div>
@@ -210,7 +212,7 @@ export function CampaignQuickForm({
       <div className="rounded-xl border border-[#decab7] bg-[#fffaf6] p-3 text-sm text-[#7b6857]">
         <p className="inline-flex items-center gap-2">
           <HandHeart className="h-4 w-4 text-[#8b4e22]" />
-          Donation calls are published by admin directly.
+          {t.forms.adminPublishes}
         </p>
       </div>
 
@@ -218,11 +220,11 @@ export function CampaignQuickForm({
 
       <Button type="submit" className="w-full rounded-xl py-2.5 text-base" disabled={isSubmitting}>
         {isSubmitting ? (
-          "Submitting..."
+          t.forms.uploading
         ) : (
           <span className="inline-flex items-center gap-2">
             <Send className="h-4 w-4" />
-            Publish donation call
+            {t.forms.publishDonationCall}
           </span>
         )}
       </Button>

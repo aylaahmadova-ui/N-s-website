@@ -8,10 +8,12 @@ import { organizationApplicationSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.infer<typeof organizationApplicationSchema>;
 
 export function OrganizationApplicationForm() {
+  const { t } = useLanguage();
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,31 +38,31 @@ export function OrganizationApplicationForm() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Could not submit application.");
+      setError(data.error ?? t.forms.couldNotSubmitApplication);
       return;
     }
 
-    setMessage("Application submitted. An admin will review it soon.");
+    setMessage(t.forms.applicationSubmitted);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Input label="Legal name" {...register("legalName")} error={errors.legalName?.message} />
-      <Input label="Display name" {...register("displayName")} error={errors.displayName?.message} />
+      <Input label={t.forms.legalName} {...register("legalName")} error={errors.legalName?.message} />
+      <Input label={t.forms.displayName} {...register("displayName")} error={errors.displayName?.message} />
       <Textarea
-        label="Organization description"
+        label={t.forms.orgDescription}
         rows={5}
         {...register("description")}
         error={errors.description?.message}
       />
-      <Input label="Website" placeholder="https://..." {...register("website")} error={errors.website?.message} />
-      <Input label="Contact email" type="email" {...register("contactEmail")} error={errors.contactEmail?.message} />
+      <Input label={t.forms.website} placeholder="https://..." {...register("website")} error={errors.website?.message} />
+      <Input label={t.forms.contactEmail} type="email" {...register("contactEmail")} error={errors.contactEmail?.message} />
 
       {message ? <p className="text-sm text-amber-700">{message}</p> : null}
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Submitting..." : "Submit application"}
+        {isSubmitting ? t.forms.submitting : t.forms.submitApplication}
       </Button>
     </form>
   );
