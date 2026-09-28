@@ -14,11 +14,25 @@ type ModerationItem = {
   status: "pending" | "approved" | "rejected" | "published" | "draft";
 };
 
+type OrganizationDecision = {
+  id: string;
+  action: string;
+  notes: string | null;
+  createdAt: string;
+};
+
 type Organization = {
   id: string;
-  display_name: string;
+  legalName: string;
+  displayName: string;
   description: string;
+  website: string | null;
+  contactEmail: string;
   status: "pending" | "approved" | "rejected" | "published" | "draft";
+  applicantName: string | null;
+  createdAt: string;
+  updatedAt: string;
+  history: OrganizationDecision[];
 };
 
 type PendingDonation = {
@@ -76,16 +90,81 @@ export function AdminClient({ organizations, moderationQueue, pendingDonations }
           <div className="space-y-3">
             {organizations.map((org) => (
               <article key={org.id} className="rounded-lg border border-slate-200 p-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">{org.display_name}</h3>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="font-semibold">{org.displayName}</h3>
+                    {org.legalName !== org.displayName ? (
+                      <p className="text-xs text-slate-500">
+                        {t.admin.orgLegalName}: {org.legalName}
+                      </p>
+                    ) : null}
+                  </div>
                   <StatusPill status={org.status} />
                 </div>
-                <p className="mt-1 text-sm text-slate-700">{org.description}</p>
-                {org.status === "pending" ? (
-                  <div className="mt-3">
-                    <OrganizationReviewActions organizationId={org.id} />
+
+                <p className="mt-2 text-sm text-slate-700">{org.description}</p>
+
+                <dl className="mt-3 grid gap-x-4 gap-y-1 text-xs sm:grid-cols-2">
+                  <div>
+                    <dt className="inline font-semibold text-slate-500">{t.admin.orgContact}: </dt>
+                    <dd className="inline">
+                      <a href={`mailto:${org.contactEmail}`} className="text-amber-800 underline hover:text-amber-900">
+                        {org.contactEmail}
+                      </a>
+                    </dd>
                   </div>
-                ) : null}
+                  {org.website ? (
+                    <div>
+                      <dt className="inline font-semibold text-slate-500">{t.admin.orgWebsite}: </dt>
+                      <dd className="inline">
+                        <a
+                          href={org.website}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="text-amber-800 underline hover:text-amber-900"
+                        >
+                          {org.website}
+                        </a>
+                      </dd>
+                    </div>
+                  ) : null}
+                  <div>
+                    <dt className="inline font-semibold text-slate-500">{t.admin.orgApplicant}: </dt>
+                    <dd className="inline text-slate-700">{org.applicantName ?? t.admin.orgUnknownApplicant}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold text-slate-500">{t.admin.orgSubmitted}: </dt>
+                    <dd className="inline text-slate-700">{new Date(org.createdAt).toLocaleString()}</dd>
+                  </div>
+                  {org.status !== "pending" ? (
+                    <div>
+                      <dt className="inline font-semibold text-slate-500">{t.admin.orgDecided}: </dt>
+                      <dd className="inline text-slate-700">{new Date(org.updatedAt).toLocaleString()}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+
+                <details className="mt-3 text-xs">
+                  <summary className="cursor-pointer font-semibold text-slate-600 hover:text-slate-900">
+                    {t.admin.orgHistory} ({org.history.length})
+                  </summary>
+                  {org.history.length ? (
+                    <ul className="mt-2 space-y-1 border-l-2 border-slate-200 pl-3">
+                      {org.history.map((entry) => (
+                        <li key={entry.id} className="text-slate-600">
+                          <span className="font-semibold text-slate-800">{entry.notes ?? entry.action}</span>
+                          <span className="text-slate-400"> · {new Date(entry.createdAt).toLocaleString()}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-2 text-slate-500">{t.admin.orgNoHistory}</p>
+                  )}
+                </details>
+
+                <div className="mt-3">
+                  <OrganizationReviewActions organizationId={org.id} currentStatus={org.status} />
+                </div>
               </article>
             ))}
             {!organizations.length ? <p className="text-sm text-slate-600">{t.admin.noOrganizations}</p> : null}

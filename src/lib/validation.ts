@@ -18,7 +18,13 @@ export const organizationApplicationSchema = z.object({
   legalName: z.string().min(3),
   displayName: z.string().min(2),
   description: z.string().min(20),
-  website: z.string().url().optional().or(z.literal("")),
+  website: z
+    .string()
+    .url()
+    // z.url() accepts any parseable URL, including javascript: and data:.
+    .refine((value) => /^https?:\/\//i.test(value), { message: "Website must start with http:// or https://" })
+    .optional()
+    .or(z.literal("")),
   contactEmail: z.string().email(),
 });
 

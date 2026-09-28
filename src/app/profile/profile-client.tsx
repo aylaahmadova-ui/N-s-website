@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/lib/i18n/context";
+import { safeExternalUrl } from "@/lib/utils";
 import { SignOutButton } from "@/components/profile/sign-out-button";
 import { DeleteAccountButton } from "@/components/profile/delete-account-button";
 import Link from "next/link";
@@ -301,9 +302,9 @@ export default function ProfileClient({
                     <span className="text-xs uppercase tracking-wider text-[#9c5f30] block font-semibold">
                       {t.profile.website}
                     </span>
-                    {organization.website ? (
+                    {safeExternalUrl(organization.website) ? (
                       <a
-                        href={organization.website}
+                        href={safeExternalUrl(organization.website)!}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-base font-semibold text-[#a56131] hover:underline block"
