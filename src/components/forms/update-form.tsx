@@ -10,11 +10,13 @@ import { updateSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.infer<typeof updateSchema>;
 
 export function UpdateForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -41,7 +43,7 @@ export function UpdateForm() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Could not create update.");
+      setError(data.error ?? t.forms.couldNotCreateUpdate);
       return;
     }
 
@@ -52,12 +54,12 @@ export function UpdateForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-      <Input label="Title" {...register("title")} error={errors.title?.message} />
-      <Textarea label="Details" rows={4} {...register("details")} error={errors.details?.message} />
+      <Input label={t.forms.title} {...register("title")} error={errors.title?.message} />
+      <Textarea label={t.forms.details} rows={4} {...register("details")} error={errors.details?.message} />
       <div className="space-y-2">
         <label htmlFor="update-image" className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-[#ddc9b7] bg-white px-3 py-2 text-sm font-semibold text-[#7d4d2a] hover:bg-[#fff3e6]">
           {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-          {isUploadingImage ? "Uploading image..." : "Upload image"}
+          {isUploadingImage ? t.forms.uploadingImage : t.forms.uploadImageLabel}
         </label>
         <input
           id="update-image"
@@ -82,12 +84,12 @@ export function UpdateForm() {
               const raw = await res.text();
               const data = raw ? (JSON.parse(raw) as { imageUrl?: string; error?: string }) : {};
               if (!res.ok || !data.imageUrl) {
-                setError(data.error ?? "Could not upload image.");
+                setError(data.error ?? t.forms.couldNotUploadImage);
                 return;
               }
               setImageUrl(data.imageUrl);
             } catch {
-              setError("Could not upload image.");
+              setError(t.forms.couldNotUploadImage);
             } finally {
               setIsUploadingImage(false);
               input.value = "";
@@ -103,7 +105,7 @@ export function UpdateForm() {
       </div>
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : "Publish update"}
+        {isSubmitting ? t.forms.saving : t.forms.publishUpdate}
       </Button>
     </form>
   );

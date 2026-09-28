@@ -9,11 +9,13 @@ import { childProfileSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.infer<typeof childProfileSchema>;
 
 export function ChildProfileForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -37,7 +39,7 @@ export function ChildProfileForm() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Could not create child profile.");
+      setError(data.error ?? t.forms.couldNotCreateChild);
       return;
     }
 
@@ -47,18 +49,18 @@ export function ChildProfileForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-      <Input label="Alias name" {...register("alias_name")} error={errors.alias_name?.message} />
-      <Input label="Age range" placeholder="10-12" {...register("age_range")} error={errors.age_range?.message} />
-      <Input label="Talents" {...register("talents")} error={errors.talents?.message} />
+      <Input label={t.forms.aliasName} {...register("alias_name")} error={errors.alias_name?.message} />
+      <Input label={t.forms.ageRange} placeholder="10-12" {...register("age_range")} error={errors.age_range?.message} />
+      <Input label={t.forms.talents} {...register("talents")} error={errors.talents?.message} />
       <Textarea
-        label="Story summary"
+        label={t.forms.storySummary}
         rows={4}
         {...register("story_summary")}
         error={errors.story_summary?.message}
       />
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : "Add child profile"}
+        {isSubmitting ? t.forms.saving : t.forms.addChildProfile}
       </Button>
     </form>
   );

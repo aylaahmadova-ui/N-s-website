@@ -4,8 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 const schema = z.object({
   campaignId: z.string().uuid(),
-  donorName: z.string().min(2).optional(),
-  donorId: z.string().min(6),
+  donorEmail: z.string().email(),
   isAnonymous: z.boolean(),
   receiptPath: z.string().min(3),
   amount: z.coerce.number().positive(),
@@ -19,7 +18,7 @@ export async function POST(request: Request) {
   }
 
   const admin = createAdminClient();
-  const { campaignId, donorId, isAnonymous, receiptPath, amount } = parsed.data;
+  const { campaignId, donorEmail, isAnonymous, receiptPath, amount } = parsed.data;
 
   const { data: campaign, error: campaignError } = await admin
     .from("campaigns")
@@ -35,15 +34,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "This donation call is already fully funded. Thank you!" }, { status: 400 });
   }
 
+  // Look up donor by email server-side — never trust a client-supplied donorId
   const { data: donor, error: donorError } = await admin
     .from("donor_registry")
     .select("donor_id, donor_name")
-    .eq("donor_id", donorId)
+    .ilike("donor_email", donorEmail.trim().toLowerCase())
+    .order("created_at", { ascending: false })
+    .limit(1)
     .maybeSingle();
 
   if (donorError || !donor) {
     return NextResponse.json({ error: "Donor profile not found." }, { status: 404 });
   }
+
+  const donorId = donor.donor_id;
 
   // Insert donation with status = 'pending' — trigger will update amount_raised on approval
   const { error: logError } = await admin.from("campaign_donations").insert({

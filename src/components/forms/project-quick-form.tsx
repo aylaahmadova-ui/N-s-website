@@ -10,11 +10,13 @@ import { contentSchema } from "@/lib/validation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n/context";
 
 type FormValues = z.input<typeof contentSchema>;
 
 export function ProjectQuickForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,7 +46,7 @@ export function ProjectQuickForm() {
     const data = await response.json();
 
     if (!response.ok) {
-      setError(data.error ?? "Could not submit idea funding.");
+      setError(data.error ?? t.forms.couldNotSubmitIdea);
       return;
     }
 
@@ -56,10 +58,10 @@ export function ProjectQuickForm() {
   if (!isOpen) {
     return (
       <div className="rounded-xl border border-dashed border-[#ddc9b7] bg-[#fffaf6] p-5">
-        <p className="text-sm text-[#7b6857]">Have an idea worth funding?</p>
+        <p className="text-sm text-[#7b6857]">{t.forms.haveIdea}</p>
         <Button type="button" onClick={() => setIsOpen(true)} className="mt-3 inline-flex items-center gap-2 rounded-lg">
           <Plus className="h-4 w-4" />
-          Post idea funding
+          {t.forms.postIdea}
         </Button>
       </div>
     );
@@ -74,22 +76,22 @@ export function ProjectQuickForm() {
           className="inline-flex items-center gap-1 rounded-md border border-[#e4d2c1] px-3 py-1 text-xs font-semibold text-[#7a4b2a] transition hover:bg-[#fff7ef]"
         >
           <X className="h-3.5 w-3.5" />
-          Close
+          {t.forms.close}
         </button>
       </div>
 
-      <Input label="Idea title" placeholder="Eco art workshop for children" {...register("title")} error={errors.title?.message} />
+      <Input label={t.forms.ideaTitle} placeholder="Eco art workshop for children" {...register("title")} error={errors.title?.message} />
 
       <Textarea
-        label="Description"
+        label={t.forms.description}
         rows={4}
-        placeholder="What the idea is, why it matters, and what impact it creates."
+        placeholder={t.forms.ideaDescription}
         {...register("summary")}
         error={errors.summary?.message}
       />
 
       <Input
-        label="Funding goal (AZN)"
+        label={t.forms.fundingGoal}
         type="number"
         step="0.01"
         min={0}
@@ -101,7 +103,7 @@ export function ProjectQuickForm() {
       <div className="rounded-xl border border-[#decab7] bg-[#fffaf6] p-3 text-sm text-[#7b6857]">
         <p className="inline-flex items-center gap-2">
           <Lightbulb className="h-4 w-4 text-[#8b4e22]" />
-          Your post will be reviewed before publication.
+          {t.forms.reviewedBeforePublication}
         </p>
       </div>
 
@@ -109,11 +111,11 @@ export function ProjectQuickForm() {
 
       <Button type="submit" className="w-full rounded-xl py-2.5 text-base" disabled={isSubmitting}>
         {isSubmitting ? (
-          "Submitting..."
+          t.forms.submitting
         ) : (
           <span className="inline-flex items-center gap-2">
             <Rocket className="h-4 w-4" />
-            Submit idea funding
+            {t.forms.submitIdea}
           </span>
         )}
       </Button>
